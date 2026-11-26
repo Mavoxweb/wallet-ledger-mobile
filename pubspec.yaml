@@ -8,18 +8,25 @@ environment:
 
 dependencies:
   dio: ^5.11.1
+  equatable: ^3.0.0
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.2
   flutter_localizations:
     sdk: flutter
+  flutter_secure_storage: ^11.2.0
+  go_router: ^18.1.4
   intl: ^0.20.3
+  local_auth: ^3.0.2
   material_ui: ^1.1.0
   wallet_ledger_api:
     path: packages/wallet_ledger_api
 
 dev_dependencies:
+  bloc_test: ^10.0.1
   flutter_test:
     sdk: flutter
+  mocktail: ^1.0.5
   very_good_analysis: ^11.0.0
 
 flutter:

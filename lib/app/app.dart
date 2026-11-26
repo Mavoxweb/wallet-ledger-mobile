@@ -1,40 +1,45 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:wallet_ledger_mobile/app/router.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
-import 'package:wallet_ledger_mobile/core/theme/typography.dart';
+import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
+import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
 
-class WalletLedgerApp extends StatelessWidget {
-  const new({super.key});
+/// Raiz do app. Recebe as dependências prontas (do bootstrap em produção, de
+/// dublês nos testes) e as entrega à árvore de widgets.
+class WalletLedgerApp extends StatefulWidget {
+  const new({
+    required this.authRepository,
+    required this.sessionBloc,
+    super.key,
+  });
+
+  final AuthRepository authRepository;
+  final SessionBloc sessionBloc;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Wallet Ledger',
-      debugShowCheckedModeBanner: false,
-      theme: buildAppTheme(),
-      locale: const Locale('pt', 'BR'),
-      supportedLocales: const [Locale('pt', 'BR')],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      // Tela provisória: as rotas de verdade chegam com a sessão (PR 3).
-      home: const _Placeholder(),
-    );
-  }
+  State<WalletLedgerApp> createState() => _WalletLedgerAppState();
 }
 
-class _Placeholder extends StatelessWidget {
-  const new();
+class _WalletLedgerAppState extends State<WalletLedgerApp> {
+  // O roteador é criado uma vez só: recriá-lo a cada build perderia a pilha.
+  late final GoRouter _router = createRouter(widget.sessionBloc);
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Wallet Ledger', style: AppText.display),
-            SizedBox(height: AppSpacing.s),
-            Text('Cada centavo no lugar', style: AppText.caption),
-          ],
+    return RepositoryProvider<AuthRepository>.value(
+      value: widget.authRepository,
+      child: BlocProvider.value(
+        value: widget.sessionBloc,
+        child: MaterialApp.router(
+          title: 'Wallet Ledger',
+          debugShowCheckedModeBanner: false,
+          theme: buildAppTheme(),
+          locale: const Locale('pt', 'BR'),
+          supportedLocales: const [Locale('pt', 'BR')],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
+          routerConfig: _router,
         ),
       ),
     );
