@@ -14,6 +14,7 @@ import 'package:wallet_ledger_mobile/core/widgets/device_frame.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
@@ -27,6 +28,7 @@ class WalletLedgerApp extends StatefulWidget {
     required this.accountRepository,
     required this.keysRepository,
     required this.pixRepository,
+    required this.chargeRepository,
     required this.prefsStore,
     super.key,
   });
@@ -37,6 +39,7 @@ class WalletLedgerApp extends StatefulWidget {
   final AccountRepository accountRepository;
   final KeysRepository keysRepository;
   final PixRepository pixRepository;
+  final ChargeRepository chargeRepository;
   final PrefsStore prefsStore;
 
   @override
@@ -66,6 +69,9 @@ class _WalletLedgerAppState extends State<WalletLedgerApp> {
         ),
         RepositoryProvider<KeysRepository>.value(value: widget.keysRepository),
         RepositoryProvider<PixRepository>.value(value: widget.pixRepository),
+        RepositoryProvider<ChargeRepository>.value(
+          value: widget.chargeRepository,
+        ),
         RepositoryProvider<AccountEvents>.value(value: _accountEvents),
         RepositoryProvider<PrefsStore>.value(value: widget.prefsStore),
         RepositoryProvider<LaunchOpener>.value(

@@ -112,16 +112,24 @@ final class PixKeyStep extends PixState {
 }
 
 final class PixAmountStep extends PixState {
-  const new({required this.recipient, this.amountCents = 0, this.description});
+  const new({
+    required this.recipient,
+    this.amountCents = 0,
+    this.description,
+    this.locked = false,
+  });
 
   final PixRecipient recipient;
 
-  /// Valor já digitado (ao voltar da confirmação).
+  /// Valor já digitado (ao voltar da confirmação) ou vindo do QR code.
   final int amountCents;
   final String? description;
 
+  /// O valor veio fixo no QR code e não pode ser mudado.
+  final bool locked;
+
   @override
-  List<Object?> get props => [recipient, amountCents, description];
+  List<Object?> get props => [recipient, amountCents, description, locked];
 }
 
 final class PixConfirmStep extends PixState {
@@ -186,7 +194,9 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
     required this._pix,
     this._biometrics,
     String Function()? newIdempotencyKey,
+    int? lockedAmountCents,
   }) : _newKey = newIdempotencyKey ?? uuidV4,
+       _locked = lockedAmountCents,
        super(const PixKeyStep()) {
     on<PixEvent>(_onEvent, transformer: sequential());
   }
@@ -194,6 +204,9 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
   final PixRepository _pix;
   final BiometricGate? _biometrics;
   final String Function() _newKey;
+
+  /// Valor fixo de um QR code lido (nulo = a pessoa digita o valor).
+  int? _locked;
 
   /// O último pedido montado. Se a pessoa voltar e confirmar exatamente o
   /// mesmo pedido, a chave é reaproveitada: se a rede caiu depois de a API
@@ -210,6 +223,8 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
         BackRequested() => _sync(() => _onBack(emit)),
         Reset() => _sync(() {
           _lastOrder = null;
+          // "Enviar outro Pix" começa do zero, sem o valor do QR.
+          _locked = null;
           emit(const PixKeyStep());
         }),
       };
@@ -227,7 +242,13 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
     emit(PixKeyStep(rawKey: event.raw, looking: true));
     try {
       final recipient = await _pix.lookup(key.type, key.value);
-      emit(PixAmountStep(recipient: recipient));
+      emit(
+        PixAmountStep(
+          recipient: recipient,
+          amountCents: _locked ?? 0,
+          locked: _locked != null,
+        ),
+      );
     } on Failure catch (failure) {
       emit(PixKeyStep(rawKey: event.raw, failure: failure));
     }
@@ -242,6 +263,7 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
         recipient: current.recipient,
         amountCents: current.amountCents,
         description: text.isEmpty ? null : text,
+        locked: current.locked,
       ),
     );
   }
@@ -250,6 +272,8 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
     final current = state;
     if (current is! PixAmountStep) return;
     if (!AmountInput(cents: event.cents).isValid) return;
+    // Valor do QR code: só aceita exatamente ele.
+    if (_locked != null && event.cents != _locked) return;
 
     final last = _lastOrder;
     final reuse =
@@ -322,6 +346,7 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
             recipient: order.recipient,
             amountCents: order.amountCents,
             description: order.description,
+            locked: _locked != null,
           ),
         );
       case PixKeyStep() || PixSending() || PixDone():

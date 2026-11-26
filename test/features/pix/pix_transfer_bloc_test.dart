@@ -164,4 +164,24 @@ void main() {
     expect(pix.sentKeys, isEmpty);
     await bloc.close();
   });
+
+  blocTest<PixTransferBloc, PixState>(
+    'QR com valor: o valor vem travado e outro valor é ignorado',
+    build: () => PixTransferBloc(
+      pix: FakePixRepository(),
+      newIdempotencyKey: _keys(),
+      lockedAmountCents: 1050,
+    ),
+    act: (bloc) => bloc
+      ..add(const KeySubmitted('bruno@walletledger.dev'))
+      ..add(const AmountSubmitted(2000))
+      ..add(const AmountSubmitted(1050)),
+    expect: () => [
+      isA<PixKeyStep>(),
+      isA<PixAmountStep>()
+          .having((s) => s.amountCents, 'valor', 1050)
+          .having((s) => s.locked, 'travado', isTrue),
+      isA<PixConfirmStep>().having((s) => s.amountCents, 'valor', 1050),
+    ],
+  );
 }

@@ -4,6 +4,7 @@ import 'package:wallet_ledger_mobile/core/errors/error_messages.dart';
 import 'package:wallet_ledger_mobile/core/motion/motion.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
+import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/bloc/pix_transfer_bloc.dart';
 import 'package:wallet_ledger_mobile/features/pix/pix_key_detector.dart';

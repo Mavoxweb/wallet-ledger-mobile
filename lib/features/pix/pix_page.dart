@@ -16,17 +16,35 @@ import 'package:wallet_ledger_mobile/features/pix/view/confirm_step.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/key_step.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/result_step.dart';
 
+/// Chave e valor lidos de um QR code, para abrir o Pix já preenchido.
+class PixPrefill {
+  const new({required this.pixKey, this.amountCents});
+
+  final String pixKey;
+
+  /// Valor fixo do QR (nulo = quem paga escolhe).
+  final int? amountCents;
+}
+
 /// Fluxo Pix: abre como uma folha que sobe de baixo (rota `/pix`).
 class PixPage extends StatelessWidget {
-  const new({super.key});
+  const new({super.key, this.prefill});
+
+  final PixPrefill? prefill;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PixTransferBloc(
-        pix: context.read<PixRepository>(),
-        biometrics: context.read<BiometricGate>(),
-      ),
+      create: (context) {
+        final bloc = PixTransferBloc(
+          pix: context.read<PixRepository>(),
+          biometrics: context.read<BiometricGate>(),
+          lockedAmountCents: prefill?.amountCents,
+        );
+        // Veio de um QR: já consulta a chave e pula para o valor.
+        if (prefill != null) bloc.add(KeySubmitted(prefill!.pixKey));
+        return bloc;
+      },
       child: const _PixFlow(),
     );
   }

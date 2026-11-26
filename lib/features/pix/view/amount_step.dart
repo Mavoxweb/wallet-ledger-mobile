@@ -7,9 +7,10 @@ import 'package:wallet_ledger_mobile/core/money/amount_input.dart';
 import 'package:wallet_ledger_mobile/core/money/money_format.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
+import 'package:wallet_ledger_mobile/core/widgets/keypad.dart';
 import 'package:wallet_ledger_mobile/core/widgets/money_text.dart';
+import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
 import 'package:wallet_ledger_mobile/features/pix/bloc/pix_transfer_bloc.dart';
-import 'package:wallet_ledger_mobile/features/pix/view/keypad.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/step_layout.dart';
 
 /// Etapa 2: o valor (teclado próprio) e uma mensagem opcional.
@@ -69,9 +70,11 @@ class _AmountStepState extends State<AmountStep> {
     final bloc = context.read<PixTransferBloc>();
     final recipient = widget.state.recipient;
 
+    final locked = widget.state.locked;
+
     return Focus(
       autofocus: true,
-      onKeyEvent: _onKey,
+      onKeyEvent: locked ? null : _onKey,
       child: StepLayout(
         title: 'Quanto você quer enviar?',
         bottom: PrimaryButton(
@@ -118,10 +121,29 @@ class _AmountStepState extends State<AmountStep> {
             ),
           ),
           const SizedBox(height: AppSpacing.l),
-          Keypad(
-            onDigit: (d) => _set(_amount.digit(d)),
-            onBackspace: () => _set(_amount.backspace()),
-          ),
+          if (locked)
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.lock_outline_rounded,
+                  size: 16,
+                  color: AppColors.inkMuted,
+                ),
+                SizedBox(width: AppSpacing.s),
+                Flexible(
+                  child: Text(
+                    'Valor definido pelo QR code.',
+                    style: AppText.caption,
+                  ),
+                ),
+              ],
+            )
+          else
+            Keypad(
+              onDigit: (d) => _set(_amount.digit(d)),
+              onBackspace: () => _set(_amount.backspace()),
+            ),
         ],
       ),
     );

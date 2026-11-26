@@ -64,56 +64,6 @@ class StepLayout extends StatelessWidget {
   }
 }
 
-/// Botão principal que vira um "carregando" sem mudar de tamanho.
-class PrimaryButton extends StatelessWidget {
-  const new({
-    required this.label,
-    required this.onPressed,
-    super.key,
-    this.loading = false,
-    this.icon,
-  });
-
-  final String label;
-  final VoidCallback? onPressed;
-  final bool loading;
-  final IconData? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: loading ? null : onPressed,
-      child: loading
-          ? Semantics(
-              label: 'Enviando',
-              child: const SizedBox.square(
-                dimension: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.4,
-                  color: AppColors.accent,
-                ),
-              ),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 20),
-                  const SizedBox(width: AppSpacing.s),
-                ],
-                Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-    );
-  }
-}
-
 /// Quem vai receber: iniciais, nome e CPF mascarados.
 class RecipientRow extends StatelessWidget {
   const new({required this.name, required this.cpf, super.key});
