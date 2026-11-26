@@ -75,6 +75,7 @@ Future<void> pumpApp(
         accountRepository: accounts ?? FakeAccountRepository(),
         keysRepository: FakeKeysRepository(),
         pixRepository: FakePixRepository(),
+        chargeRepository: FakeChargeRepository(),
         prefsStore: InMemoryPrefsStore(),
       ),
     ),

@@ -9,6 +9,7 @@ import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/login/login_page.dart';
 import 'package:wallet_ledger_mobile/features/auth/register/register_page.dart';
 import 'package:wallet_ledger_mobile/features/charge/charge_page.dart';
+import 'package:wallet_ledger_mobile/features/charge/scan_page.dart';
 import 'package:wallet_ledger_mobile/features/home/view/home_page.dart';
 import 'package:wallet_ledger_mobile/features/pix/pix_page.dart';
 import 'package:wallet_ledger_mobile/features/profile/profile_page.dart';
@@ -58,7 +59,7 @@ GoRouter createRouter(SessionBloc session, LaunchGate launch) => GoRouter(
       path: '/pix',
       pageBuilder: (context, state) => CustomTransitionPage<void>(
         key: state.pageKey,
-        child: const PixPage(),
+        child: PixPage(prefill: state.extra as PixPrefill?),
         transitionDuration: AppMotion.sheet,
         reverseTransitionDuration: AppMotion.tab,
         transitionsBuilder: (context, animation, _, child) {
@@ -77,6 +78,17 @@ GoRouter createRouter(SessionBloc session, LaunchGate launch) => GoRouter(
             child: child,
           );
         },
+      ),
+    ),
+    // Leitor de QR code: tela cheia, fora das abas.
+    GoRoute(
+      path: '/scan',
+      pageBuilder: (context, state) => CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: const ScanPage(),
+        transitionDuration: AppMotion.tab,
+        transitionsBuilder: (context, animation, _, child) =>
+            FadeTransition(opacity: animation, child: child),
       ),
     ),
     StatefulShellRoute(

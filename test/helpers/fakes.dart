@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
+import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
@@ -154,6 +155,22 @@ class FakePixRepository implements PixRepository {
       balanceCents: 247410 - amountCents,
       createdAt: _now,
     );
+  }
+}
+
+class FakeChargeRepository implements ChargeRepository {
+  /// Vetor oficial do Manual do BR Code.
+  static const payload =
+      '00020126580014br.gov.bcb.pix0136123e4567-e12b-12d1-a456-426655440000'
+      '5204000053039865802BR5913Fulano de Tal6008BRASILIA62070503***63041D3D';
+
+  /// Pedidos recebidos: (chave, valor).
+  final requests = <(String, int?)>[];
+
+  @override
+  Future<String> create({required String keyId, int? amountCents}) async {
+    requests.add((keyId, amountCents));
+    return payload;
   }
 }
 

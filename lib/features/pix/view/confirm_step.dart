@@ -4,6 +4,7 @@ import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/money_text.dart';
+import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
 import 'package:wallet_ledger_mobile/features/pix/bloc/pix_transfer_bloc.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/step_layout.dart';
 

@@ -6,9 +6,9 @@ import 'package:wallet_ledger_mobile/core/money/money_format.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/money_text.dart';
+import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
 import 'package:wallet_ledger_mobile/features/pix/bloc/pix_transfer_bloc.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/check_mark.dart';
-import 'package:wallet_ledger_mobile/features/pix/view/step_layout.dart';
 import 'package:wallet_ledger_mobile/features/statement/group_by_day.dart';
 
 /// Comprovante: o check desenhado, o valor e para quem foi.
