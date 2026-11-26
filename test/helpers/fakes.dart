@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
+import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
@@ -175,13 +176,66 @@ class FakeChargeRepository implements ChargeRepository {
 }
 
 class FakeKeysRepository implements KeysRepository {
+  new({List<PixKeyItem>? keys, this.createFailure})
+    : keys =
+          keys ??
+          [
+            const PixKeyItem(
+              id: 'k1',
+              kind: PixKeyKind.email,
+              value: 'ana@walletledger.dev',
+            ),
+            const PixKeyItem(
+              id: 'k2',
+              kind: PixKeyKind.evp,
+              value: '0b7a3c1e-1d2f-4a5b-8c9d-0e1f2a3b4c5d',
+            ),
+          ];
+
+  final List<PixKeyItem> keys;
+  final Failure? createFailure;
+  final created = <(PixKeyKind, String?)>[];
+  final deleted = <String>[];
+
   @override
-  Future<List<PixKeyItem>> list() async => const [
-    PixKeyItem(id: 'k1', kind: PixKeyKind.email, value: 'ana@walletledger.dev'),
-    PixKeyItem(
-      id: 'k2',
-      kind: PixKeyKind.evp,
-      value: '0b7a3c1e-1d2f-4a5b-8c9d-0e1f2a3b4c5d',
-    ),
-  ];
+  Future<List<PixKeyItem>> list() async => List.of(keys);
+
+  @override
+  Future<PixKeyItem> create(PixKeyKind kind, String? value) async {
+    created.add((kind, value));
+    if (createFailure != null) throw createFailure!;
+    final key = PixKeyItem(
+      id: 'k${keys.length + 1}',
+      kind: kind,
+      value: value ?? 'aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee',
+    );
+    keys.add(key);
+    return key;
+  }
+
+  @override
+  Future<void> delete(String id) async {
+    deleted.add(id);
+    keys.removeWhere((k) => k.id == id);
+  }
+}
+
+/// Depósito de mentira, com falhas consumidas em ordem.
+class FakeDepositRepository implements DepositRepository {
+  new({List<Failure>? failures}) : _failures = [...?failures];
+
+  final List<Failure> _failures;
+
+  /// (valor, chave de idempotência) de cada chamada.
+  final calls = <(int, String)>[];
+
+  @override
+  Future<int> simulated({
+    required int amountCents,
+    required String idempotencyKey,
+  }) async {
+    calls.add((amountCents, idempotencyKey));
+    if (_failures.isNotEmpty) throw _failures.removeAt(0);
+    return 247410 + amountCents;
+  }
 }

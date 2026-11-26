@@ -9,8 +9,10 @@ import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/glass_nav_bar.dart';
+import 'package:wallet_ledger_mobile/core/widgets/pressable.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
+import 'package:wallet_ledger_mobile/features/deposit/deposit_sheet.dart';
 import 'package:wallet_ledger_mobile/features/home/cubit/home_cubit.dart';
 import 'package:wallet_ledger_mobile/features/home/view/balance_card.dart';
 import 'package:wallet_ledger_mobile/features/home/view/cards_carousel.dart';
@@ -104,10 +106,19 @@ class _HomeView extends StatelessWidget {
           ],
         ),
       ),
+      const SliverPadding(
+        padding: EdgeInsets.fromLTRB(
+          AppSpacing.xl,
+          AppSpacing.xl,
+          AppSpacing.xl,
+          0,
+        ),
+        sliver: SliverToBoxAdapter(child: _QuickActions()),
+      ),
       SliverPadding(
         padding: const EdgeInsets.fromLTRB(
           AppSpacing.xl,
-          AppSpacing.xxl,
+          AppSpacing.xl,
           AppSpacing.xl,
           0,
         ),
@@ -205,6 +216,80 @@ class _Greeting extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Atalhos: depositar, ler QR e chaves. O Pix já tem o botão central.
+class _QuickActions extends StatelessWidget {
+  const new();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _QuickAction(
+            icon: Icons.add_card_rounded,
+            label: 'Depositar',
+            onTap: () => showDepositSheet(context),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.m),
+        Expanded(
+          child: _QuickAction(
+            icon: Icons.qr_code_scanner_rounded,
+            label: 'Ler QR',
+            onTap: () => context.push('/scan'),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.m),
+        Expanded(
+          child: _QuickAction(
+            icon: Icons.key_rounded,
+            label: 'Chaves',
+            onTap: () => context.go('/perfil/chaves'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuickAction extends StatelessWidget {
+  const new({required this.icon, required this.label, required this.onTap});
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Pressable(
+      onTap: onTap,
+      semanticLabel: label,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.m),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(AppRadii.control),
+          boxShadow: AppShadows.soft,
+        ),
+        child: ExcludeSemantics(
+          child: Column(
+            children: [
+              Icon(icon, color: AppColors.accent),
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.caption.copyWith(color: AppColors.ink),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

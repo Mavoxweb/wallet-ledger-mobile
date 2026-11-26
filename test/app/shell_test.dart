@@ -45,7 +45,7 @@ void main() {
     await tester.tap(find.text('Perfil'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Seus dados e preferências.'), findsOneWidget);
+    expect(find.text('Chaves Pix'), findsOneWidget);
   });
 
   testWidgets('com movimento reduzido, a troca de aba não desliza', (

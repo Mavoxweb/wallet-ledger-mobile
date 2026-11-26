@@ -11,6 +11,7 @@ import 'package:wallet_ledger_mobile/features/auth/register/register_page.dart';
 import 'package:wallet_ledger_mobile/features/charge/charge_page.dart';
 import 'package:wallet_ledger_mobile/features/charge/scan_page.dart';
 import 'package:wallet_ledger_mobile/features/home/view/home_page.dart';
+import 'package:wallet_ledger_mobile/features/keys/keys_page.dart';
 import 'package:wallet_ledger_mobile/features/pix/pix_page.dart';
 import 'package:wallet_ledger_mobile/features/profile/profile_page.dart';
 import 'package:wallet_ledger_mobile/features/splash/splash_page.dart';
@@ -102,14 +103,24 @@ GoRouter createRouter(SessionBloc session, LaunchGate launch) => GoRouter(
         _branch('/', const HomePage()),
         _branch('/extrato', const StatementPage()),
         _branch('/cobrar', const ChargePage()),
-        _branch('/perfil', const ProfilePage()),
+        _branch(
+          '/perfil',
+          const ProfilePage(),
+          routes: [
+            GoRoute(path: 'chaves', builder: (_, _) => const KeysPage()),
+          ],
+        ),
       ],
     ),
   ],
 );
 
-StatefulShellBranch _branch(String path, Widget page) => StatefulShellBranch(
-  routes: [GoRoute(path: path, builder: (_, _) => page)],
+StatefulShellBranch _branch(
+  String path,
+  Widget page, {
+  List<RouteBase> routes = const [],
+}) => StatefulShellBranch(
+  routes: [GoRoute(path: path, builder: (_, _) => page, routes: routes)],
 );
 
 /// Adapta um Stream (o do Bloc) para o Listenable que o GoRouter entende.

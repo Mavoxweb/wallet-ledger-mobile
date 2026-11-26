@@ -11,6 +11,7 @@ import 'package:wallet_ledger_mobile/features/account/data/account_repository.da
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
 import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
+import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
@@ -59,6 +60,7 @@ void bootstrap() {
       keysRepository: ApiKeysRepository(api),
       pixRepository: ApiPixRepository(api),
       chargeRepository: ApiChargeRepository(api),
+      depositRepository: ApiDepositRepository(api),
       prefsStore: SharedPrefsStore(),
     ),
   );
