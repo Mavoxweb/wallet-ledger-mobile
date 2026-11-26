@@ -5,9 +5,12 @@ import 'package:wallet_ledger_mobile/core/config/env.dart';
 import 'package:wallet_ledger_mobile/core/network/auth_interceptor.dart';
 import 'package:wallet_ledger_mobile/core/network/dio_factory.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
+import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/core/storage/token_store.dart';
+import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 
 /// Monta as dependências do app (a "composição") e o inicia.
 void bootstrap() {
@@ -50,6 +53,9 @@ void bootstrap() {
       authRepository: auth,
       sessionBloc: session,
       biometricGate: BiometricGate(),
+      accountRepository: ApiAccountRepository(api),
+      keysRepository: ApiKeysRepository(api),
+      prefsStore: SharedPrefsStore(),
     ),
   );
 }

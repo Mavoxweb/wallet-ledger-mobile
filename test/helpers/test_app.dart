@@ -9,6 +9,8 @@ import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
 
+import 'fakes.dart';
+
 class MockAuthRepository extends Mock implements AuthRepository;
 
 /// Biometria controlada pelo teste.
@@ -57,6 +59,7 @@ Future<void> pumpApp(
   BiometricGate? biometrics,
   double textScale = 1,
   bool reduceMotion = false,
+  FakeAccountRepository? accounts,
 }) async {
   final session = SessionBloc(repository)..add(const SessionStarted());
   await tester.pumpWidget(
@@ -69,6 +72,9 @@ Future<void> pumpApp(
         authRepository: repository,
         sessionBloc: session,
         biometricGate: biometrics ?? FakeBiometricGate(),
+        accountRepository: accounts ?? FakeAccountRepository(),
+        keysRepository: FakeKeysRepository(),
+        prefsStore: InMemoryPrefsStore(),
       ),
     ),
   );

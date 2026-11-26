@@ -36,11 +36,7 @@ void main() {
     await finishIntro(tester);
 
     expect(biometrics.asked, 1);
-    expect(
-      find.text('Boa tarde,'),
-      findsNothing,
-    ); // ainda não é o início real (PR 5)
-    expect(find.textContaining('Ana'), findsWidgets);
+    expect(find.text('Últimas movimentações'), findsOneWidget);
   });
 
   testWidgets('biometria cancelada oferece entrar com senha', (tester) async {

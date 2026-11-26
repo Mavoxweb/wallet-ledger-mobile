@@ -3,11 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/app/launch_gate.dart';
 import 'package:wallet_ledger_mobile/app/router.dart';
+import 'package:wallet_ledger_mobile/app/scroll_behavior.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
+import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
 import 'package:wallet_ledger_mobile/core/widgets/device_frame.dart';
+import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 
 /// Raiz do app. Recebe as dependências prontas (do bootstrap em produção, de
 /// dublês nos testes) e as entrega à árvore de widgets.
@@ -16,12 +20,18 @@ class WalletLedgerApp extends StatefulWidget {
     required this.authRepository,
     required this.sessionBloc,
     required this.biometricGate,
+    required this.accountRepository,
+    required this.keysRepository,
+    required this.prefsStore,
     super.key,
   });
 
   final AuthRepository authRepository;
   final SessionBloc sessionBloc;
   final BiometricGate biometricGate;
+  final AccountRepository accountRepository;
+  final KeysRepository keysRepository;
+  final PrefsStore prefsStore;
 
   @override
   State<WalletLedgerApp> createState() => _WalletLedgerAppState();
@@ -38,6 +48,11 @@ class _WalletLedgerAppState extends State<WalletLedgerApp> {
       providers: [
         RepositoryProvider<AuthRepository>.value(value: widget.authRepository),
         RepositoryProvider<BiometricGate>.value(value: widget.biometricGate),
+        RepositoryProvider<AccountRepository>.value(
+          value: widget.accountRepository,
+        ),
+        RepositoryProvider<KeysRepository>.value(value: widget.keysRepository),
+        RepositoryProvider<PrefsStore>.value(value: widget.prefsStore),
         RepositoryProvider<LaunchOpener>.value(
           value: LaunchOpener(_launch.open),
         ),
@@ -52,6 +67,7 @@ class _WalletLedgerAppState extends State<WalletLedgerApp> {
           supportedLocales: const [Locale('pt', 'BR')],
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
           routerConfig: _router,
+          scrollBehavior: const AppScrollBehavior(),
           builder: (context, child) => DeviceFrame(child: child!),
         ),
       ),

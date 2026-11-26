@@ -9,7 +9,7 @@ import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/login/login_page.dart';
 import 'package:wallet_ledger_mobile/features/auth/register/register_page.dart';
 import 'package:wallet_ledger_mobile/features/charge/charge_page.dart';
-import 'package:wallet_ledger_mobile/features/home/home_placeholder.dart';
+import 'package:wallet_ledger_mobile/features/home/view/home_page.dart';
 import 'package:wallet_ledger_mobile/features/pix/pix_page.dart';
 import 'package:wallet_ledger_mobile/features/profile/profile_page.dart';
 import 'package:wallet_ledger_mobile/features/splash/splash_page.dart';
@@ -87,7 +87,7 @@ GoRouter createRouter(SessionBloc session, LaunchGate launch) => GoRouter(
             children: children,
           ),
       branches: [
-        _branch('/', const HomePlaceholder()),
+        _branch('/', const HomePage()),
         _branch('/extrato', const StatementPage()),
         _branch('/cobrar', const ChargePage()),
         _branch('/perfil', const ProfilePage()),
