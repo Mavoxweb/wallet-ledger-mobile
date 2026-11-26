@@ -76,6 +76,7 @@ Future<void> pumpApp(
         keysRepository: FakeKeysRepository(),
         pixRepository: FakePixRepository(),
         chargeRepository: FakeChargeRepository(),
+        depositRepository: FakeDepositRepository(),
         prefsStore: InMemoryPrefsStore(),
       ),
     ),
