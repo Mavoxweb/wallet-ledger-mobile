@@ -95,12 +95,15 @@ void main() {
   });
 
   test(
-    'se a renovação falhar, encerra a sessão uma vez e não entra em laço',
+    'se a API recusar a renovação, encerra a sessão uma vez, sem laço',
     () async {
+      final refresh = RequestOptions(path: '/api/v1/auth/refresh');
       final s = _setup(
         handler: (_) async => const FakeResponse(401, {}),
-        refresh: (_) async =>
-            throw DioException(requestOptions: RequestOptions()),
+        refresh: (_) async => throw DioException(
+          requestOptions: refresh,
+          response: Response(requestOptions: refresh, statusCode: 401),
+        ),
       );
 
       await expectLater(
@@ -117,6 +120,51 @@ void main() {
       expect(s.expired, [1]);
       expect(await s.store.read(), isNull);
       expect(s.adapter.requests, hasLength(1));
+    },
+  );
+
+  // Cair a rede durante a renovação não prova que a sessão acabou: o refresh
+  // token pode estar válido. A pessoa continua logada e vê um erro de rede.
+  test('se a rede cair durante a renovação, a sessão continua', () async {
+    final s = _setup(
+      handler: (_) async => const FakeResponse(401, {}),
+      refresh: (_) async => throw DioException.connectionError(
+        requestOptions: RequestOptions(path: '/api/v1/auth/refresh'),
+        reason: 'sem rede',
+      ),
+    );
+
+    await expectLater(
+      s.dio.get<void>('/api/v1/me'),
+      throwsA(
+        isA<DioException>().having(
+          (e) => e.type,
+          'type',
+          DioExceptionType.connectionError,
+        ),
+      ),
+    );
+
+    expect(s.expired, isEmpty);
+    expect((await s.store.read())!.refreshToken, 'r1');
+  });
+
+  test(
+    'se a API falhar (5xx) durante a renovação, a sessão continua',
+    () async {
+      final refresh = RequestOptions(path: '/api/v1/auth/refresh');
+      final s = _setup(
+        handler: (_) async => const FakeResponse(401, {}),
+        refresh: (_) async => throw DioException(
+          requestOptions: refresh,
+          response: Response(requestOptions: refresh, statusCode: 503),
+        ),
+      );
+
+      await expectLater(s.dio.get<void>('/api/v1/me'), throwsA(anything));
+
+      expect(s.expired, isEmpty);
+      expect(await s.store.read(), isNotNull);
     },
   );
 
