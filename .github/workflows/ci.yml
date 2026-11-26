@@ -19,6 +19,19 @@ jobs:
 
       - run: flutter pub get
 
+      # Regenera o cliente a partir do contrato fixado em contract.version.
+      # Se o código commitado for diferente, alguém editou o gerado à mão ou
+      # mudou a versão do contrato sem regenerar.
+      - name: Cliente da API atualizado
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash tool/generate_api.sh
+          if ! git diff --exit-code -- packages/; then
+            echo "::error::Cliente desatualizado: rode 'bash tool/generate_api.sh' e commite packages/"
+            exit 1
+          fi
+
       - name: Formatação
         run: dart format --output=none --set-exit-if-changed lib test
 
