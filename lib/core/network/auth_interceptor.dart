@@ -79,7 +79,20 @@ class AuthInterceptor extends QueuedInterceptor {
       );
       handler.resolve(await _retryClient.fetch<dynamic>(retry));
     } on DioException catch (e) {
-      handler.next(e.requestOptions == request ? e : err);
+      if (e.requestOptions == request) return handler.next(e);
+      // A renovação não chegou na API (rede caiu, tempo esgotou): a
+      // requisição original falha como erro de rede, não como 401.
+      if (e.response == null) {
+        return handler.next(
+          DioException(
+            requestOptions: request,
+            type: e.type,
+            error: e.error,
+            message: e.message,
+          ),
+        );
+      }
+      handler.next(err);
     }
   }
 
@@ -88,12 +101,23 @@ class AuthInterceptor extends QueuedInterceptor {
       final tokens = await _refresh(refreshToken);
       await _store.write(tokens);
       return tokens;
-    } on Object {
-      // Não deu para renovar: a sessão acabou.
-      // Limpa tudo e avisa o app uma vez.
+    } on Object catch (e) {
+      // Só encerra a sessão quando a API **recusou** o refresh token (4xx).
+      // Sem resposta (rede) ou com erro do servidor (5xx), o token pode
+      // continuar válido: a pessoa segue logada e tenta de novo depois.
+      if (!_sessionRejected(e)) rethrow;
       await _store.clear();
       _onSessionExpired();
       rethrow;
     }
   }
+
+  static bool _sessionRejected(Object error) => switch (error) {
+    DioException(:final response?) =>
+      response.statusCode != null &&
+          response.statusCode! >= 400 &&
+          response.statusCode! < 500,
+    DioException() => false,
+    _ => true,
+  };
 }
