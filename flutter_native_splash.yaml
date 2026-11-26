@@ -1,0 +1,12 @@
+# Splash nativo: aparece enquanto o motor do Flutter carrega, antes do
+# primeiro frame. Depois a IntroAnimation assume, na mesma cor de fundo.
+# Rodar: dart run flutter_native_splash:create
+flutter_native_splash:
+  color: "#0F1413"
+  image: assets/icon/splash.png
+  android_12:
+    color: "#0F1413"
+    image: assets/icon/icon_foreground.png
+    icon_background_color: "#0F1413"
+  web: true
+  ios: false
