@@ -8,26 +8,51 @@ const _authenticated = SessionAuthenticated(
 );
 
 void main() {
-  test('verificando a sessão: fica na entrada', () {
-    expect(sessionRedirect(const SessionUnknown(), '/'), '/splash');
-    expect(sessionRedirect(const SessionUnknown(), '/splash'), isNull);
+  test('antes de a entrada terminar, tudo fica na splash', () {
+    expect(sessionRedirect(_authenticated, '/', launchReady: false), '/splash');
+    expect(
+      sessionRedirect(
+        const SessionUnauthenticated(),
+        '/login',
+        launchReady: false,
+      ),
+      '/splash',
+    );
+    expect(
+      sessionRedirect(_authenticated, '/splash', launchReady: false),
+      isNull,
+    );
   });
 
   test('sem sessão: só login e cadastro', () {
-    expect(sessionRedirect(const SessionUnauthenticated(), '/'), '/login');
     expect(
-      sessionRedirect(const SessionUnauthenticated(), '/splash'),
+      sessionRedirect(const SessionUnauthenticated(), '/', launchReady: true),
       '/login',
     );
     expect(
-      sessionRedirect(const SessionUnauthenticated(), '/register'),
+      sessionRedirect(
+        const SessionUnauthenticated(),
+        '/splash',
+        launchReady: true,
+      ),
+      '/login',
+    );
+    expect(
+      sessionRedirect(
+        const SessionUnauthenticated(),
+        '/register',
+        launchReady: true,
+      ),
       isNull,
     );
   });
 
   test('com sessão: sai do login e da entrada para o início', () {
-    expect(sessionRedirect(_authenticated, '/login'), '/');
-    expect(sessionRedirect(_authenticated, '/splash'), '/');
-    expect(sessionRedirect(_authenticated, '/'), isNull);
+    expect(sessionRedirect(_authenticated, '/login', launchReady: true), '/');
+    expect(sessionRedirect(_authenticated, '/splash', launchReady: true), '/');
+    expect(
+      sessionRedirect(_authenticated, '/extrato', launchReady: true),
+      isNull,
+    );
   });
 }
