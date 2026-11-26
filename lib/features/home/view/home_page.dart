@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/errors/error_messages.dart';
+import 'package:wallet_ledger_mobile/core/events/account_events.dart';
 import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
@@ -28,6 +29,7 @@ class HomePage extends StatelessWidget {
           accounts: context.read<AccountRepository>(),
           keys: context.read<KeysRepository>(),
           prefs: context.read<PrefsStore>(),
+          accountChanges: context.read<AccountEvents?>()?.changes,
         );
         // Começa a carregar sem esperar:
         // a tela mostra o esqueleto enquanto isso.

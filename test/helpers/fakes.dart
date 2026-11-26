@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
 export 'package:wallet_ledger_mobile/core/storage/prefs_store.dart'
     show InMemoryPrefsStore;
@@ -104,6 +105,55 @@ class PagedAccountRepository extends FakeAccountRepository {
     await hold[cursor]?.future;
     if (failOn.contains(cursor)) throw const NetworkFailure();
     return pages[cursor] ?? const MovementPage(items: [], nextCursor: null);
+  }
+}
+
+const notFound = ApiFailure(code: 'not_found', message: '', status: 404);
+const noFunds = ApiFailure(
+  code: 'insufficient_funds',
+  message: '',
+  status: 422,
+);
+
+/// Pix de mentira. As falhas de `transferFailures` são consumidas em ordem,
+/// uma por envio; depois delas, o envio dá certo.
+class FakePixRepository implements PixRepository {
+  new({this.lookupFailure, List<Failure>? transferFailures})
+    : _transferFailures = [...?transferFailures];
+
+  final Failure? lookupFailure;
+  final List<Failure> _transferFailures;
+
+  /// Chaves de idempotência recebidas, na ordem.
+  final sentKeys = <String>[];
+
+  @override
+  Future<PixRecipient> lookup(PixKeyKind type, String value) async {
+    if (lookupFailure != null) throw lookupFailure!;
+    return PixRecipient(
+      keyType: type,
+      keyValue: value,
+      maskedName: 'Bruno C. D.',
+      maskedCpf: '***.456.789-**',
+    );
+  }
+
+  @override
+  Future<PixReceipt> transfer({
+    required PixRecipient recipient,
+    required int amountCents,
+    required String? description,
+    required String idempotencyKey,
+  }) async {
+    sentKeys.add(idempotencyKey);
+    if (_transferFailures.isNotEmpty) throw _transferFailures.removeAt(0);
+    return PixReceipt(
+      transactionId: 'tx-1',
+      amountCents: amountCents,
+      recipientMaskedName: recipient.maskedName,
+      balanceCents: 247410 - amountCents,
+      createdAt: _now,
+    );
   }
 }
 

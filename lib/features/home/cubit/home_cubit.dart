@@ -54,8 +54,23 @@ final class HomeError extends HomeState {
 }
 
 class HomeCubit extends Cubit<HomeState> {
-  new({required this._accounts, required this._keys, required this._prefs})
-    : super(const HomeLoading());
+  new({
+    required this._accounts,
+    required this._keys,
+    required this._prefs,
+    Stream<void>? accountChanges,
+  }) : super(const HomeLoading()) {
+    // Depois de um Pix, atualiza sem voltar ao esqueleto.
+    _changes = accountChanges?.listen((_) => refresh());
+  }
+
+  StreamSubscription<void>? _changes;
+
+  @override
+  Future<void> close() async {
+    await _changes?.cancel();
+    await super.close();
+  }
 
   final AccountRepository _accounts;
   final KeysRepository _keys;

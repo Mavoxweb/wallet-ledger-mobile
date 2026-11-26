@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/errors/error_messages.dart';
+import 'package:wallet_ledger_mobile/core/events/account_events.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/empty_state.dart';
@@ -22,9 +23,10 @@ class StatementPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          StatementBloc(accounts: context.read<AccountRepository>())
-            ..add(const StatementStarted()),
+      create: (context) => StatementBloc(
+        accounts: context.read<AccountRepository>(),
+        accountChanges: context.read<AccountEvents?>()?.changes,
+      )..add(const StatementStarted()),
       child: _StatementView(clock: clock),
     );
   }
