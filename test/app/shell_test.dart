@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/widgets/glass_nav_bar.dart';
+import 'package:wallet_ledger_mobile/features/home/view/home_page.dart';
+import 'package:wallet_ledger_mobile/features/profile/profile_page.dart';
 
 import '../helpers/test_app.dart';
 
@@ -46,6 +48,40 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Chaves Pix'), findsOneWidget);
+  });
+
+  // A aba que sai precisa sumir de verdade. Antes, o TickerMode desligava a
+  // animação de saída e a aba antiga ficava por cima, ainda opaca, ao voltar
+  // para uma aba anterior (de Extrato para Início, por exemplo).
+  testWidgets('voltar para o Início esconde a aba que estava aberta', (
+    tester,
+  ) async {
+    await pumpApp(tester, repository: authRepository());
+    await finishIntro(tester);
+
+    await tester.tap(find.text('Perfil'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Início'));
+    await tester.pumpAndSettle();
+
+    double opacityOf(Type page) => tester
+        .widget<FadeTransition>(
+          // O fade da aba: o primeiro logo abaixo do AnimatedOpacity dela.
+          find
+              .descendant(
+                of: find.ancestor(
+                  of: find.byType(page),
+                  matching: find.byType(AnimatedOpacity),
+                ),
+                matching: find.byType(FadeTransition),
+              )
+              .first,
+        )
+        .opacity
+        .value;
+
+    expect(opacityOf(ProfilePage), 0);
+    expect(opacityOf(HomePage), 1);
   });
 
   testWidgets('com movimento reduzido, a troca de aba não desliza', (

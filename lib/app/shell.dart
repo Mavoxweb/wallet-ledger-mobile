@@ -61,19 +61,21 @@ class AnimatedBranchContainer extends StatelessWidget {
         for (var i = 0; i < children.length; i++)
           IgnorePointer(
             ignoring: i != currentIndex,
-            // TickerMode pausa animações das abas escondidas.
-            child: TickerMode(
-              enabled: i == currentIndex,
-              child: AnimatedOpacity(
-                opacity: i == currentIndex ? 1 : 0,
+            child: AnimatedOpacity(
+              opacity: i == currentIndex ? 1 : 0,
+              duration: AppMotion.tab,
+              curve: AppCurves.easeOut,
+              child: AnimatedSlide(
+                offset: reduced || i == currentIndex
+                    ? Offset.zero
+                    : const Offset(0, 0.01),
                 duration: AppMotion.tab,
                 curve: AppCurves.easeOut,
-                child: AnimatedSlide(
-                  offset: reduced || i == currentIndex
-                      ? Offset.zero
-                      : const Offset(0, 0.01),
-                  duration: AppMotion.tab,
-                  curve: AppCurves.easeOut,
+                // O TickerMode pausa só o conteúdo das abas escondidas.
+                // Ele fica por dentro do fade: por fora, pausaria também a
+                // animação de saída, e a aba antiga ficaria opaca por cima.
+                child: TickerMode(
+                  enabled: i == currentIndex,
                   child: children[i],
                 ),
               ),
