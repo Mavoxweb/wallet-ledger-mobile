@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
@@ -65,6 +67,43 @@ class FakeAccountRepository implements AccountRepository {
       items: empty ? const [] : sampleMovements.take(limit).toList(),
       nextCursor: null,
     );
+  }
+}
+
+/// Uma página de depósitos com os ids dados.
+MovementPage page(List<int> ids, {required String? next}) => MovementPage(
+  items: [
+    for (final id in ids)
+      Movement(
+        postingId: id,
+        transactionId: 't$id',
+        kind: MovementKind.deposit,
+        isIncoming: true,
+        amountCents: 100,
+        createdAt: _now,
+      ),
+  ],
+  nextCursor: next,
+);
+
+/// Extrato paginado: cada cursor devolve uma página. [hold] segura a resposta
+/// de um cursor até o teste liberar; [failOn] faz um cursor falhar.
+class PagedAccountRepository extends FakeAccountRepository {
+  new(this.pages, {this.hold = const {}, this.failOn = const {}});
+
+  final Map<String?, MovementPage> pages;
+  final Map<String, Completer<void>> hold;
+  final Set<String> failOn;
+
+  /// Cursores pedidos, na ordem.
+  final calls = <String?>[];
+
+  @override
+  Future<MovementPage> statement({int limit = 20, String? cursor}) async {
+    calls.add(cursor);
+    await hold[cursor]?.future;
+    if (failOn.contains(cursor)) throw const NetworkFailure();
+    return pages[cursor] ?? const MovementPage(items: [], nextCursor: null);
   }
 }
 
