@@ -1,0 +1,14 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - packages/**
+    - "**/*.g.dart"
+    - build/**
+    - android/**
+    - web/**
+
+linter:
+  rules:
+    # Documentação pública obrigatória é para bibliotecas publicadas; este é um app.
+    public_member_api_docs: false
