@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:wallet_ledger_mobile/app/launch_gate.dart';
 import 'package:wallet_ledger_mobile/app/router.dart';
+import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
+import 'package:wallet_ledger_mobile/core/widgets/device_frame.dart';
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
 
@@ -12,11 +15,13 @@ class WalletLedgerApp extends StatefulWidget {
   const new({
     required this.authRepository,
     required this.sessionBloc,
+    required this.biometricGate,
     super.key,
   });
 
   final AuthRepository authRepository;
   final SessionBloc sessionBloc;
+  final BiometricGate biometricGate;
 
   @override
   State<WalletLedgerApp> createState() => _WalletLedgerAppState();
@@ -24,12 +29,19 @@ class WalletLedgerApp extends StatefulWidget {
 
 class _WalletLedgerAppState extends State<WalletLedgerApp> {
   // O roteador é criado uma vez só: recriá-lo a cada build perderia a pilha.
-  late final GoRouter _router = createRouter(widget.sessionBloc);
+  final _launch = LaunchGate();
+  late final GoRouter _router = createRouter(widget.sessionBloc, _launch);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider<AuthRepository>.value(
-      value: widget.authRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthRepository>.value(value: widget.authRepository),
+        RepositoryProvider<BiometricGate>.value(value: widget.biometricGate),
+        RepositoryProvider<LaunchOpener>.value(
+          value: LaunchOpener(_launch.open),
+        ),
+      ],
       child: BlocProvider.value(
         value: widget.sessionBloc,
         child: MaterialApp.router(
@@ -40,6 +52,7 @@ class _WalletLedgerAppState extends State<WalletLedgerApp> {
           supportedLocales: const [Locale('pt', 'BR')],
           localizationsDelegates: GlobalMaterialLocalizations.delegates,
           routerConfig: _router,
+          builder: (context, child) => DeviceFrame(child: child!),
         ),
       ),
     );
