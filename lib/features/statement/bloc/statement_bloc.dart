@@ -133,7 +133,9 @@ class StatementState extends Equatable {
 // ---------------------------------------------------------------- bloc
 
 class StatementBloc extends Bloc<StatementEvent, StatementState> {
-  new({required this._accounts}) : super(const StatementState()) {
+  new({required this._accounts, Stream<void>? accountChanges})
+    : super(const StatementState()) {
+    _changes = accountChanges?.listen((_) => add(const StatementRefreshed()));
     on<StatementStarted>(_onStarted);
     on<StatementRefreshed>(_onRefreshed);
     on<StatementNextPageRequested>(_onNextPage);
@@ -143,6 +145,13 @@ class StatementBloc extends Bloc<StatementEvent, StatementState> {
   }
 
   final AccountRepository _accounts;
+  StreamSubscription<void>? _changes;
+
+  @override
+  Future<void> close() async {
+    await _changes?.cancel();
+    await super.close();
+  }
 
   static const pageSize = 20;
 

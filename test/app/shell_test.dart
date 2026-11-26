@@ -35,7 +35,7 @@ void main() {
     await tester.tap(find.byKey(GlassNavBar.pixButtonKey));
     await tester.pumpAndSettle();
 
-    expect(find.text('Enviar Pix'), findsOneWidget);
+    expect(find.text('Para quem você quer enviar?'), findsOneWidget);
   });
 
   testWidgets('trocar de aba mostra a tela certa', (tester) async {

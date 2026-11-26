@@ -11,6 +11,7 @@ import 'package:wallet_ledger_mobile/features/account/data/account_repository.da
 import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
 /// Monta as dependências do app (a "composição") e o inicia.
 void bootstrap() {
@@ -55,6 +56,7 @@ void bootstrap() {
       biometricGate: BiometricGate(),
       accountRepository: ApiAccountRepository(api),
       keysRepository: ApiKeysRepository(api),
+      pixRepository: ApiPixRepository(api),
       prefsStore: SharedPrefsStore(),
     ),
   );

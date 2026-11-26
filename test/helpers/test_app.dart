@@ -74,6 +74,7 @@ Future<void> pumpApp(
         biometricGate: biometrics ?? FakeBiometricGate(),
         accountRepository: accounts ?? FakeAccountRepository(),
         keysRepository: FakeKeysRepository(),
+        pixRepository: FakePixRepository(),
         prefsStore: InMemoryPrefsStore(),
       ),
     ),
