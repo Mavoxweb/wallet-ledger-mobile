@@ -11,7 +11,6 @@ import 'package:wallet_ledger_mobile/features/pix/bloc/pix_transfer_bloc.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/check_mark.dart';
 import 'package:wallet_ledger_mobile/features/statement/group_by_day.dart';
 
-/// Comprovante: o check desenhado, o valor e para quem foi.
 class DoneStep extends StatelessWidget {
   const new({required this.state, super.key});
 

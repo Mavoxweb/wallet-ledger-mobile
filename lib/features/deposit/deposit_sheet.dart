@@ -13,7 +13,6 @@ import 'package:wallet_ledger_mobile/features/deposit/deposit_cubit.dart';
 import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/check_mark.dart';
 
-/// Folha do depósito simulado (só na demonstração).
 Future<void> showDepositSheet(BuildContext context) {
   final repository = context.read<DepositRepository>();
   final events = context.read<AccountEvents?>();
@@ -70,7 +69,6 @@ class _DepositSheetState extends State<DepositSheet> {
               children: [
                 const Text('Depósito simulado', style: AppText.title),
                 const SizedBox(height: AppSpacing.xs),
-                // Deixa claro que o dinheiro não é de verdade.
                 const Row(
                   children: [
                     Icon(

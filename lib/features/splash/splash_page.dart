@@ -67,7 +67,6 @@ class _SplashPageState extends State<SplashPage> {
         backgroundColor: AppColors.ink,
         body: Stack(
           children: [
-            // Brilho menta difuso atrás do ícone.
             const Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(

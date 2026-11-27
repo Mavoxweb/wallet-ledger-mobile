@@ -33,8 +33,6 @@ class HomePage extends StatelessWidget {
           prefs: context.read<PrefsStore>(),
           accountChanges: context.read<AccountEvents?>()?.changes,
         );
-        // Começa a carregar sem esperar:
-        // a tela mostra o esqueleto enquanto isso.
         unawaited(cubit.load());
         return cubit;
       },
@@ -154,7 +152,6 @@ class _HomeView extends StatelessWidget {
   }
 }
 
-/// Saudação pela hora do dia + avatar com as iniciais.
 class _Greeting extends StatelessWidget {
   const new();
 
@@ -221,7 +218,6 @@ class _Greeting extends StatelessWidget {
   }
 }
 
-/// Atalhos: depositar, ler QR e chaves. O Pix já tem o botão central.
 class _QuickActions extends StatelessWidget {
   const new();
 
@@ -295,7 +291,6 @@ class _QuickAction extends StatelessWidget {
   }
 }
 
-/// Superfície branca com sombra macia (no lugar de bordas).
 class _Panel extends StatelessWidget {
   const new({required this.child});
 
@@ -358,8 +353,7 @@ class _ErrorBox extends StatelessWidget {
   }
 }
 
-/// Formas cinza no lugar do conteúdo enquanto carrega: a tela não "pula"
-/// quando os dados chegam, porque o espaço já está reservado.
+/// Reserva o espaço para a tela não pular quando os dados chegam.
 class _Skeleton extends StatelessWidget {
   const new();
 

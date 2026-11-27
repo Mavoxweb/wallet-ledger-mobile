@@ -4,14 +4,10 @@ import 'package:wallet_ledger_mobile/core/storage/token_store.dart';
 /// Troca o refresh token por um par novo (chama `POST /api/v1/auth/refresh`).
 typedef RefreshTokens = Future<Tokens> Function(String refreshToken);
 
-/// Coloca o access token em cada requisição e, quando ele expira (`401`),
-/// renova a sessão em silêncio e repete a requisição.
+/// Põe o access token em cada requisição e, no `401`, renova e repete.
 ///
-/// Por que `QueuedInterceptor`: ele trata um erro de cada vez. Se três telas
-/// recebem `401` ao mesmo tempo, a primeira renova; quando chega a vez das
-/// outras duas, o token já mudou, e elas só repetem a chamada com o token novo.
-/// Assim nasce **uma** renovação, e não três (a API trataria a segunda como
-/// reuso de token e derrubaria a sessão).
+/// `QueuedInterceptor` trata um erro por vez: com três `401` simultâneos, só o
+/// primeiro renova. A API trataria uma segunda renovação como reuso de token.
 class AuthInterceptor extends QueuedInterceptor {
   new({
     required this._store,

@@ -21,8 +21,6 @@ PixPrefill? readPixQr(String raw) {
   }
 }
 
-/// Lê um QR code Pix com a câmera (ou um código colado) e abre o Pix já
-/// preenchido.
 class ScanPage extends StatefulWidget {
   const new({super.key});
 
@@ -64,9 +62,8 @@ class _ScanPageState extends State<ScanPage> {
     context.pushReplacement('/pix', extra: prefill);
   }
 
-  /// Abre um campo para colar o código. Um campo de texto (e não a leitura
-  /// direta da área de transferência) funciona em qualquer plataforma: no
-  /// navegador, ler a área de transferência por código pede uma permissão.
+  /// Campo de texto em vez de ler a área de transferência: no navegador,
+  /// ler por código pede permissão.
   Future<void> _paste() async {
     final text = await showModalBottomSheet<String>(
       context: context,
@@ -149,7 +146,6 @@ class _ScanPageState extends State<ScanPage> {
   }
 }
 
-/// Moldura no centro: mostra onde encaixar o QR.
 class _Viewfinder extends StatelessWidget {
   const new();
 
@@ -202,7 +198,6 @@ class _CameraUnavailable extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppText.caption.copyWith(color: AppColors.onInkMuted),
               ),
-              // Espaço para a moldura não cobrir o texto.
               const SizedBox(height: 200),
             ],
           ),
@@ -212,7 +207,6 @@ class _CameraUnavailable extends StatelessWidget {
   }
 }
 
-/// Campo para colar o "Pix Copia e Cola". Confere o código antes de fechar.
 class _PasteSheet extends StatefulWidget {
   const new();
 
@@ -246,7 +240,6 @@ class _PasteSheetState extends State<_PasteSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      // Sobe junto com o teclado do celular.
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: SafeArea(
         child: Padding(

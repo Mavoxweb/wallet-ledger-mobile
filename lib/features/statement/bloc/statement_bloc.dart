@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 
-// ---------------------------------------------------------------- eventos
-
 sealed class StatementEvent extends Equatable {
   const new();
 
@@ -14,20 +12,15 @@ sealed class StatementEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Abriu a tela: carrega a primeira página.
 final class StatementStarted extends StatementEvent {
   const new();
 }
 
-/// Chegou perto do fim da lista: pede a próxima página.
 final class StatementNextPageRequested extends StatementEvent {
   const new();
 }
 
-/// Puxou para atualizar: busca a primeira página de novo, sem piscar.
-///
-/// [done] avisa a tela quando acabou, para o indicador parar de girar. Não dá
-/// para esperar "o próximo estado": se nada mudou, o Bloc não emite nenhum.
+/// [done] avisa a tela quando acabou: se nada mudou, o Bloc não emite estado.
 final class StatementRefreshed extends StatementEvent {
   const new({this.done});
 
@@ -42,8 +35,6 @@ final class StatementFilterChanged extends StatementEvent {
   @override
   List<Object?> get props => [filter];
 }
-
-// ---------------------------------------------------------------- estado
 
 enum StatementFilter { all, incoming, outgoing }
 
@@ -66,7 +57,6 @@ class StatementState extends Equatable {
   /// Tudo o que já foi carregado, sem filtro.
   final List<Movement> items;
 
-  /// Cursor da próxima página, como a API devolveu.
   final String? nextCursor;
   final bool isLoadingMore;
   final bool hasReachedEnd;
@@ -129,8 +119,6 @@ class StatementState extends Equatable {
     failure,
   ];
 }
-
-// ---------------------------------------------------------------- bloc
 
 class StatementBloc extends Bloc<StatementEvent, StatementState> {
   new({required this._accounts, Stream<void>? accountChanges})

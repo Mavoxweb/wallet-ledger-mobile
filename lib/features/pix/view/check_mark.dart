@@ -4,10 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/motion/motion.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 
-/// Check do comprovante, desenhado: o círculo se fecha e o "✓" é traçado.
-///
-/// Animação rara (uma vez por Pix): aqui cabe um pouco de encanto. Com
-/// movimento reduzido, aparece pronto.
+/// Com movimento reduzido, aparece pronto.
 class CheckMark extends StatefulWidget {
   const new({super.key, this.size = 88});
 
@@ -70,7 +67,6 @@ class _CheckPainter extends CustomPainter {
     final center = size.center(Offset.zero);
     final radius = size.width / 2;
 
-    // Fundo menta que cresce junto com o círculo.
     final fill = Paint()
       ..color = AppColors.accentSoft.withValues(
         alpha: (progress / 0.55).clamp(0, 1),
@@ -99,7 +95,6 @@ class _CheckPainter extends CustomPainter {
       ..moveTo(size.width * 0.30, size.height * 0.52)
       ..lineTo(size.width * 0.44, size.height * 0.66)
       ..lineTo(size.width * 0.71, size.height * 0.38);
-    // Só o trecho já "traçado" do caminho.
     for (final metric in path.computeMetrics()) {
       canvas.drawPath(metric.extractPath(0, metric.length * tick), stroke);
     }

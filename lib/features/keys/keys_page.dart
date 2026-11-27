@@ -14,7 +14,6 @@ import 'package:wallet_ledger_mobile/features/keys/cubit/keys_cubit.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/view/add_key_sheet.dart';
 
-/// Chaves Pix da conta: listar, cadastrar (até 5) e remover com confirmação.
 class KeysPage extends StatelessWidget {
   const new({super.key});
 

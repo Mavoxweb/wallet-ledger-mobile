@@ -19,7 +19,6 @@ import 'package:wallet_ledger_mobile/features/charge/cubit/charge_cubit.dart';
 import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 
-/// Aba Cobrar: gera o QR code de uma chave, com valor fixo ou livre.
 class ChargePage extends StatelessWidget {
   const new({super.key});
 

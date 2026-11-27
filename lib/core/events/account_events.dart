@@ -1,10 +1,6 @@
 import 'dart:async';
 
-/// Avisa as telas que o saldo e o extrato mudaram (por exemplo, depois de um
-/// Pix). Início e Extrato escutam e se atualizam sozinhos.
-///
-/// Um `Stream` simples em vez de um estado global: quem avisa não precisa
-/// saber quem escuta.
+/// Avisa Início e Extrato que o saldo mudou (por exemplo, depois de um Pix).
 class AccountEvents {
   final _controller = StreamController<void>.broadcast();
 

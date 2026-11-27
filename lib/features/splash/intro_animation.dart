@@ -4,12 +4,7 @@ import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/brand_mark.dart';
 
-/// A animação de entrada aprovada no protótipo:
-/// o ícone cresce, as três linhas se desenham em sequência, o ponto final
-/// aparece com uma leve passada, e o nome sobe por baixo.
-///
-/// Um único `AnimationController` comanda tudo; cada parte usa um `Interval`
-/// (um trecho da linha do tempo de 0 a 1). Assim a sequência é exata.
+/// Um só `AnimationController`; cada parte usa um `Interval` da linha do tempo.
 class IntroAnimation extends StatefulWidget {
   const new({required this.onFinished, super.key});
 
@@ -49,7 +44,6 @@ class _IntroAnimationState extends State<IntroAnimation>
   @override
   void initState() {
     super.initState();
-    // `..` (cascata) chama dois métodos no mesmo objeto.
     _controller
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) widget.onFinished();
@@ -59,7 +53,6 @@ class _IntroAnimationState extends State<IntroAnimation>
 
   @override
   void dispose() {
-    // Cada controller precisa ser descartado, senão continua rodando sozinho.
     _controller.dispose();
     super.dispose();
   }

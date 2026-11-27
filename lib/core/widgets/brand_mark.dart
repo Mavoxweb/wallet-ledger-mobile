@@ -3,9 +3,7 @@ import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 
 /// O símbolo do Wallet Ledger: três linhas de um livro-razão, a última
 /// terminando num ponto (o saldo conferido). As proporções seguem o ícone.
-///
-/// `lineProgress` (0 a 1 por linha) permite à animação de entrada "desenhar" as
-/// linhas em sequência; parado, tudo aparece completo.
+/// [lineProgress] (0 a 1 por linha) desenha as linhas em sequência na entrada.
 class BrandMark extends StatelessWidget {
   const new({
     super.key,

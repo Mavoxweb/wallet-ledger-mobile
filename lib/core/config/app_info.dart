@@ -1,3 +1,2 @@
-/// Versão mostrada no Perfil. Igual ao `version` do pubspec.yaml (um teste
-/// confere que os dois não se desencontram).
+/// Igual ao `version` do pubspec.yaml; um teste confere.
 const appVersion = '0.1.0';

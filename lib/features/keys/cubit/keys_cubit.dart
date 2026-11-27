@@ -61,7 +61,6 @@ class KeysCubit extends Cubit<KeysState> {
   Future<bool> create(PixKeyKind kind, String? value) async {
     if (state.busy) return false;
     if (state.atLimit) {
-      // Já sabemos a resposta: nem chama a API.
       emit(_ready(failure: limitFailure));
       return false;
     }

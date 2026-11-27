@@ -7,11 +7,8 @@ final _evp = RegExp(
 );
 final _phoneChars = RegExp(r'^\+?[\d\s().-]+$');
 
-/// Descobre o tipo da chave pelo formato: e-mail, celular ou aleatória.
-///
-/// Só detecta; quem normaliza (tirar máscara, pôr +55) é a API, para existir
-/// uma regra só. O app tira apenas os espaços das pontas.
-/// Devolve um *record* `(type, value)`, ou nulo se não reconhecer.
+/// Só detecta o tipo pelo formato; quem normaliza é a API, para existir uma
+/// regra só.
 ({PixKeyKind type, String value})? detectPixKey(String raw) {
   final value = raw.trim();
   if (value.isEmpty) return null;

@@ -13,14 +13,12 @@ class MovementTile extends StatelessWidget {
   /// Texto pequeno embaixo do valor (a hora, no Extrato).
   final String? trailingCaption;
 
-  /// Título: quem enviou/recebeu, ou o tipo da operação.
   static String titleOf(Movement m) => switch (m.kind) {
     MovementKind.deposit => 'Depósito',
     MovementKind.reversal => 'Estorno',
     MovementKind.transfer => m.counterparty ?? 'Pix',
   };
 
-  /// Subtítulo: o tipo e, quando houver, a descrição.
   static String subtitleOf(Movement m) {
     final kind = switch (m.kind) {
       MovementKind.deposit => 'Depósito simulado',

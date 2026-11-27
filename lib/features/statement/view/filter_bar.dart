@@ -5,8 +5,6 @@ import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/pressable.dart';
 import 'package:wallet_ledger_mobile/features/statement/bloc/statement_bloc.dart';
 
-/// Tudo · Entradas · Saídas. A opção escolhida fica escura, com a cor mudando
-/// suavemente (ou na hora, com movimento reduzido).
 class FilterBar extends StatelessWidget {
   const new({required this.selected, required this.onChanged, super.key});
 

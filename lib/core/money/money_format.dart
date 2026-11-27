@@ -1,12 +1,8 @@
 import 'package:intl/intl.dart';
 
-/// Separador de milhar brasileiro, só para a parte inteira (os reais).
 final _thousands = NumberFormat.decimalPattern('pt_BR');
 
-/// Reais e centavos separados, para exibir os centavos menores no saldo.
-///
-/// É feito só com contas inteiras (`~/` e `%`): o dinheiro nunca passa por
-/// `double`, nem para exibir.
+/// Reais e centavos separados, só com contas inteiras.
 ({String reais, String cents}) splitCents(int cents) {
   final absolute = cents.abs();
   final reais = _thousands.format(absolute ~/ 100);

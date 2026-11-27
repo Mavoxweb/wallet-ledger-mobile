@@ -64,7 +64,6 @@ class StepLayout extends StatelessWidget {
   }
 }
 
-/// Quem vai receber: iniciais, nome e CPF mascarados.
 class RecipientRow extends StatelessWidget {
   const new({required this.name, required this.cpf, super.key});
 

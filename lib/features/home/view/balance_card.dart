@@ -7,8 +7,7 @@ import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/money_text.dart';
 import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
 
-/// Cartão de saldo escuro: brilho menta no canto e linhas de livro-razão
-/// gravadas ao fundo. É um `Hero`: no Extrato, ele "voa" até o topo.
+/// É um `Hero`: no Extrato, ele "voa" até o topo.
 class BalanceCard extends StatelessWidget {
   const new({
     required this.account,
@@ -210,7 +209,6 @@ class _HiddenAmount extends StatelessWidget {
   }
 }
 
-/// Linhas finas de livro-razão gravadas à direita do cartão.
 class _LedgerLines extends CustomPainter {
   const new();
 

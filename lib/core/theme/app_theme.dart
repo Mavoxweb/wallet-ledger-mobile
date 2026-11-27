@@ -2,7 +2,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 
-/// Tema único do app, montado a partir dos tokens.
 ThemeData buildAppTheme() {
   final scheme = ColorScheme.fromSeed(
     seedColor: AppColors.accent,

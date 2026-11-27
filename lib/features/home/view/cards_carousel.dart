@@ -2,9 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/motion/motion.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 
-/// Carrossel de cartões com encaixe: o `PageView` para sempre num cartão
-/// inteiro, e um arremesso rápido com o dedo leva ao próximo (impulso).
-/// O cartão seguinte aparece pela metade, convidando a deslizar.
+/// Encaixa um cartão por vez; um arremesso rápido leva ao próximo.
 class CardsCarousel extends StatefulWidget {
   const new({required this.cards, super.key});
 
