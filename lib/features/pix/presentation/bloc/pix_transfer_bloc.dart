@@ -6,8 +6,9 @@ import 'package:wallet_ledger_mobile/core/ids/uuid.dart';
 import 'package:wallet_ledger_mobile/core/money/amount_input.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/features/pix/domain/pix_key_detector.dart';
-import 'package:wallet_ledger_mobile/features/pix/domain/pix_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/domain/pix_transfer.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/usecases/lookup_pix_key.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/usecases/send_pix.dart';
 
 sealed class PixEvent extends Equatable {
   const new();
@@ -181,7 +182,8 @@ final class PixFailed extends PixState {
 /// "Confirmar" espera o primeiro e, como a etapa já mudou, não faz nada.
 class PixTransferBloc extends Bloc<PixEvent, PixState> {
   new({
-    required this._pix,
+    required this._lookup,
+    required this._sendPix,
     this._biometrics,
     String Function()? newIdempotencyKey,
     int? lockedAmountCents,
@@ -191,7 +193,8 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
     on<PixEvent>(_onEvent, transformer: sequential());
   }
 
-  final PixRepository _pix;
+  final LookupPixKey _lookup;
+  final SendPix _sendPix;
   final BiometricGate? _biometrics;
   final String Function() _newKey;
 
@@ -231,7 +234,7 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
 
     emit(PixKeyStep(rawKey: event.raw, looking: true));
     try {
-      final recipient = await _pix.lookup(key.type, key.value);
+      final recipient = await _lookup(key.type, key.value);
       emit(
         PixAmountStep(
           recipient: recipient,
@@ -300,7 +303,7 @@ class PixTransferBloc extends Bloc<PixEvent, PixState> {
   Future<void> _send(PixOrder order, Emitter<PixState> emit) async {
     emit(PixSending(order));
     try {
-      final receipt = await _pix.transfer(
+      final receipt = await _sendPix(
         recipient: order.recipient,
         amountCents: order.amountCents,
         description: order.description,

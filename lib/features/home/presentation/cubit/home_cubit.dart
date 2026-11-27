@@ -5,9 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/features/account/domain/account.dart';
-import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_account.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_statement.dart';
 import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/list_pix_keys.dart';
 
 sealed class HomeState extends Equatable {
   const new();
@@ -57,8 +58,9 @@ final class HomeError extends HomeState {
 
 class HomeCubit extends Cubit<HomeState> {
   new({
-    required this._accounts,
-    required this._keys,
+    required this._getAccount,
+    required this._getStatement,
+    required this._listKeys,
     required this._prefs,
     Stream<void>? accountChanges,
   }) : super(const HomeLoading()) {
@@ -74,8 +76,9 @@ class HomeCubit extends Cubit<HomeState> {
     await super.close();
   }
 
-  final AccountRepository _accounts;
-  final KeysRepository _keys;
+  final GetAccount _getAccount;
+  final GetStatement _getStatement;
+  final ListPixKeys _listKeys;
   final PrefsStore _prefs;
 
   static const recentCount = 3;
@@ -100,9 +103,9 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> _fetch({bool keepOnFailure = false}) async {
     try {
       final (account, page, keys, hidden) = await (
-        _accounts.account(),
-        _accounts.statement(limit: recentCount),
-        _keys.list(),
+        _getAccount(),
+        _getStatement(limit: recentCount),
+        _listKeys(),
         _prefs.balanceHidden(),
       ).wait;
 

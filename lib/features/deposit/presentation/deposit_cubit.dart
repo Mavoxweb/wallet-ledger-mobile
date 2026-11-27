@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/ids/uuid.dart';
-import 'package:wallet_ledger_mobile/features/deposit/domain/deposit_repository.dart';
+import 'package:wallet_ledger_mobile/features/deposit/domain/usecases/make_simulated_deposit.dart';
 
 sealed class DepositState extends Equatable {
   const new();
@@ -48,11 +48,11 @@ final class DepositFailed extends DepositState {
 /// presa ao valor. Tentar de novo o mesmo valor reusa a chave (nunca deposita
 /// duas vezes); outro valor é outro depósito e ganha chave nova.
 class DepositCubit extends Cubit<DepositState> {
-  new({required this._deposits, String Function()? newIdempotencyKey})
+  new({required this._deposit, String Function()? newIdempotencyKey})
     : _newKey = newIdempotencyKey ?? uuidV4,
       super(const DepositIdle());
 
-  final DepositRepository _deposits;
+  final MakeSimulatedDeposit _deposit;
   final String Function() _newKey;
 
   /// Teto da API por depósito: R$ 1.000,00.
@@ -72,7 +72,7 @@ class DepositCubit extends Cubit<DepositState> {
 
     emit(DepositSending(amountCents));
     try {
-      final balance = await _deposits.simulated(
+      final balance = await _deposit(
         amountCents: amountCents,
         idempotencyKey: _lastKey!,
       );

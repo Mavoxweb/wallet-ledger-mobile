@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/login.dart';
 
 enum LoginStatus { editing, submitting, success, failure }
 
@@ -40,9 +40,9 @@ class LoginState extends Equatable {
 }
 
 class LoginCubit extends Cubit<LoginState> {
-  new(this._repository) : super(const LoginState());
+  new(this._login) : super(const LoginState());
 
-  final AuthRepository _repository;
+  final Login _login;
 
   void emailChanged(String value) =>
       emit(state.copyWith(email: value, status: LoginStatus.editing));
@@ -54,7 +54,7 @@ class LoginCubit extends Cubit<LoginState> {
     if (!state.canSubmit) return;
     emit(state.copyWith(status: LoginStatus.submitting));
     try {
-      await _repository.login(email: state.email, password: state.password);
+      await _login(email: state.email, password: state.password);
       emit(state.copyWith(status: LoginStatus.success));
     } on Failure catch (failure) {
       emit(state.copyWith(status: LoginStatus.failure, failure: failure));

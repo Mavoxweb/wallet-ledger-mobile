@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/register.dart';
 
 enum RegisterStatus { editing, submitting, success, failure }
 
@@ -56,9 +56,9 @@ class RegisterState extends Equatable {
 }
 
 class RegisterCubit extends Cubit<RegisterState> {
-  new(this._repository) : super(const RegisterState());
+  new(this._register) : super(const RegisterState());
 
-  final AuthRepository _repository;
+  final Register _register;
 
   void nameChanged(String v) =>
       emit(state.copyWith(name: v, status: RegisterStatus.editing));
@@ -73,7 +73,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (!state.canSubmit) return;
     emit(state.copyWith(status: RegisterStatus.submitting));
     try {
-      await _repository.register(
+      await _register(
         name: state.name,
         cpf: state.cpf,
         email: state.email,

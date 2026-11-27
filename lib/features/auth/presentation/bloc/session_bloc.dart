@@ -1,8 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/domain/me.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/check_session.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/clear_session.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/get_me.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/logout.dart';
 
 sealed class SessionEvent extends Equatable {
   const new();
@@ -57,20 +60,28 @@ final class SessionUnauthenticated extends SessionState {
 }
 
 class SessionBloc extends Bloc<SessionEvent, SessionState> {
-  new(this._repository) : super(const SessionUnknown()) {
+  new({
+    required this._checkSession,
+    required this._getMe,
+    required this._logout,
+    required this._clearSession,
+  }) : super(const SessionUnknown()) {
     on<SessionStarted>(_onStarted);
     on<SessionLoggedIn>(_onLoggedIn);
     on<SessionLoggedOut>(_onLoggedOut);
     on<SessionExpired>(_onExpired);
   }
 
-  final AuthRepository _repository;
+  final CheckSession _checkSession;
+  final GetMe _getMe;
+  final Logout _logout;
+  final ClearSession _clearSession;
 
   Future<void> _onStarted(
     SessionStarted event,
     Emitter<SessionState> emit,
   ) async {
-    if (!await _repository.hasSession()) {
+    if (!await _checkSession()) {
       return emit(const SessionUnauthenticated());
     }
     await _loadProfile(emit);
@@ -83,7 +94,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     SessionLoggedOut event,
     Emitter<SessionState> emit,
   ) async {
-    await _repository.logout();
+    await _logout();
     emit(const SessionUnauthenticated());
   }
 
@@ -91,16 +102,16 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     SessionExpired event,
     Emitter<SessionState> emit,
   ) async {
-    await _repository.clearSession();
+    await _clearSession();
     emit(const SessionUnauthenticated());
   }
 
   Future<void> _loadProfile(Emitter<SessionState> emit) async {
     try {
-      emit(SessionAuthenticated(await _repository.me()));
+      emit(SessionAuthenticated(await _getMe()));
     } on Failure {
       // Sessão guardada que não vale mais: começa do zero, no login.
-      await _repository.clearSession();
+      await _clearSession();
       emit(const SessionUnauthenticated());
     }
   }

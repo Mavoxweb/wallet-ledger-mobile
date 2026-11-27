@@ -9,6 +9,10 @@ import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/core/storage/token_store.dart';
 import 'package:wallet_ledger_mobile/features/account/data/api_account_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/api_auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/check_session.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/clear_session.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/get_me.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/logout.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/charge/data/api_charge_repository.dart';
 import 'package:wallet_ledger_mobile/features/deposit/data/api_deposit_repository.dart';
@@ -48,7 +52,12 @@ void bootstrap() {
   // interceptors de autenticação dele, que disputariam o header com o nosso.
   final api = WalletLedgerApi(dio: dio, interceptors: const []);
   final auth = ApiAuthRepository(api: api, store: store);
-  session = SessionBloc(auth)..add(const SessionStarted());
+  session = SessionBloc(
+    checkSession: CheckSession(auth),
+    getMe: GetMe(auth),
+    logout: Logout(auth),
+    clearSession: ClearSession(auth),
+  )..add(const SessionStarted());
 
   runApp(
     WalletLedgerApp(

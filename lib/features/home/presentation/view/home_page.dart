@@ -10,7 +10,8 @@ import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/glass_nav_bar.dart';
 import 'package:wallet_ledger_mobile/core/widgets/pressable.dart';
-import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_account.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_statement.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/deposit/presentation/deposit_sheet.dart';
 import 'package:wallet_ledger_mobile/features/home/presentation/cubit/home_cubit.dart';
@@ -18,7 +19,7 @@ import 'package:wallet_ledger_mobile/features/home/presentation/view/balance_car
 import 'package:wallet_ledger_mobile/features/home/presentation/view/cards_carousel.dart';
 import 'package:wallet_ledger_mobile/features/home/presentation/view/keys_card.dart';
 import 'package:wallet_ledger_mobile/features/home/presentation/view/movement_tile.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/list_pix_keys.dart';
 
 class HomePage extends StatelessWidget {
   const new({super.key});
@@ -28,8 +29,9 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final cubit = HomeCubit(
-          accounts: context.read<AccountRepository>(),
-          keys: context.read<KeysRepository>(),
+          getAccount: context.read<GetAccount>(),
+          getStatement: context.read<GetStatement>(),
+          listKeys: context.read<ListPixKeys>(),
           prefs: context.read<PrefsStore>(),
           accountChanges: context.read<AccountEvents?>()?.changes,
         );

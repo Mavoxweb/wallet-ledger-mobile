@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/add_pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/list_pix_keys.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/remove_pix_key.dart';
 
 enum KeysStatus { loading, ready, failure }
 
@@ -28,31 +30,24 @@ class KeysState extends Equatable {
   /// Falha ao remover, que aparece na própria tela de chaves.
   final Failure? deleteFailure;
 
-  bool get atLimit => keys.length >= KeysCubit.maxKeys;
+  bool get atLimit => keys.length >= AddPixKey.maxKeys;
 
   @override
   List<Object?> get props => [status, keys, busy, failure, deleteFailure];
 }
 
 class KeysCubit extends Cubit<KeysState> {
-  new({required this._keys}) : super(const KeysState());
+  new({required this._list, required this._add, required this._remove})
+    : super(const KeysState());
 
-  final KeysRepository _keys;
-
-  /// Limite do Banco Central para pessoa física: 5 chaves por conta.
-  static const maxKeys = 5;
-
-  /// A mesma falha que a API daria, para o limite ser avisado sem chamada.
-  static const limitFailure = ApiFailure(
-    code: 'pix_key_limit',
-    message: '',
-    status: 422,
-  );
+  final ListPixKeys _list;
+  final AddPixKey _add;
+  final RemovePixKey _remove;
 
   Future<void> load() async {
     emit(const KeysState());
     try {
-      emit(KeysState(status: KeysStatus.ready, keys: await _keys.list()));
+      emit(KeysState(status: KeysStatus.ready, keys: await _list()));
     } on Failure catch (failure) {
       emit(KeysState(status: KeysStatus.failure, failure: failure));
     }
@@ -61,13 +56,9 @@ class KeysCubit extends Cubit<KeysState> {
   /// Cadastra e devolve se deu certo (a folha fecha só nesse caso).
   Future<bool> create(PixKeyKind kind, String? value) async {
     if (state.busy) return false;
-    if (state.atLimit) {
-      emit(_ready(failure: limitFailure));
-      return false;
-    }
     emit(_ready(busy: true));
     try {
-      final key = await _keys.create(kind, value);
+      final key = await _add(kind, value, currentCount: state.keys.length);
       emit(_ready(keys: [...state.keys, key]));
       return true;
     } on Failure catch (failure) {
@@ -81,7 +72,7 @@ class KeysCubit extends Cubit<KeysState> {
     if (state.busy) return;
     emit(_ready(busy: true));
     try {
-      await _keys.delete(id);
+      await _remove(id);
       emit(
         _ready(
           keys: [

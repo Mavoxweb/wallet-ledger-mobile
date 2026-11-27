@@ -6,6 +6,8 @@ import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/domain/me.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 
+import '../../helpers/blocs.dart';
+
 class _MockAuthRepository extends Mock implements AuthRepository;
 
 const _me = Me(
@@ -30,7 +32,7 @@ void main() {
       when(() => repository.hasSession()).thenAnswer((_) async => true);
       when(() => repository.me()).thenAnswer((_) async => _me);
     },
-    build: () => SessionBloc(repository),
+    build: () => sessionBlocFor(repository),
     act: (bloc) => bloc.add(const SessionStarted()),
     expect: () => [const SessionAuthenticated(_me)],
   );
@@ -39,7 +41,7 @@ void main() {
     'sem sessão guardada: não autenticado',
     setUp: () =>
         when(() => repository.hasSession()).thenAnswer((_) async => false),
-    build: () => SessionBloc(repository),
+    build: () => sessionBlocFor(repository),
     act: (bloc) => bloc.add(const SessionStarted()),
     expect: () => [const SessionUnauthenticated()],
   );
@@ -50,7 +52,7 @@ void main() {
       when(() => repository.hasSession()).thenAnswer((_) async => true);
       when(() => repository.me()).thenThrow(const NetworkFailure());
     },
-    build: () => SessionBloc(repository),
+    build: () => sessionBlocFor(repository),
     act: (bloc) => bloc.add(const SessionStarted()),
     expect: () => [const SessionUnauthenticated()],
     verify: (_) => verify(() => repository.clearSession()).called(1),
@@ -59,14 +61,14 @@ void main() {
   blocTest<SessionBloc, SessionState>(
     'login concluído: busca o perfil e autentica',
     setUp: () => when(() => repository.me()).thenAnswer((_) async => _me),
-    build: () => SessionBloc(repository),
+    build: () => sessionBlocFor(repository),
     act: (bloc) => bloc.add(const SessionLoggedIn()),
     expect: () => [const SessionAuthenticated(_me)],
   );
 
   blocTest<SessionBloc, SessionState>(
     'sessão expirada: limpa e não autenticado',
-    build: () => SessionBloc(repository),
+    build: () => sessionBlocFor(repository),
     seed: () => const SessionAuthenticated(_me),
     act: (bloc) => bloc.add(const SessionExpired()),
     expect: () => [const SessionUnauthenticated()],
@@ -75,7 +77,7 @@ void main() {
 
   blocTest<SessionBloc, SessionState>(
     'sair: faz logout na API e não autenticado',
-    build: () => SessionBloc(repository),
+    build: () => sessionBlocFor(repository),
     seed: () => const SessionAuthenticated(_me),
     act: (bloc) => bloc.add(const SessionLoggedOut()),
     expect: () => [const SessionUnauthenticated()],

@@ -9,7 +9,8 @@ import 'package:wallet_ledger_mobile/core/motion/motion.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
-import 'package:wallet_ledger_mobile/features/pix/domain/pix_repository.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/usecases/lookup_pix_key.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/usecases/send_pix.dart';
 import 'package:wallet_ledger_mobile/features/pix/presentation/bloc/pix_transfer_bloc.dart';
 import 'package:wallet_ledger_mobile/features/pix/presentation/view/amount_step.dart';
 import 'package:wallet_ledger_mobile/features/pix/presentation/view/confirm_step.dart';
@@ -36,7 +37,8 @@ class PixPage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final bloc = PixTransferBloc(
-          pix: context.read<PixRepository>(),
+          lookup: context.read<LookupPixKey>(),
+          sendPix: context.read<SendPix>(),
           biometrics: context.read<BiometricGate>(),
           lockedAmountCents: prefill?.amountCents,
         );

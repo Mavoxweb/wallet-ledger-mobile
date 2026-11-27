@@ -9,12 +9,12 @@ import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/keypad.dart';
 import 'package:wallet_ledger_mobile/core/widgets/money_text.dart';
 import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
-import 'package:wallet_ledger_mobile/features/deposit/domain/deposit_repository.dart';
+import 'package:wallet_ledger_mobile/features/deposit/domain/usecases/make_simulated_deposit.dart';
 import 'package:wallet_ledger_mobile/features/deposit/presentation/deposit_cubit.dart';
 import 'package:wallet_ledger_mobile/features/pix/presentation/view/check_mark.dart';
 
 Future<void> showDepositSheet(BuildContext context) {
-  final repository = context.read<DepositRepository>();
+  final repository = context.read<MakeSimulatedDeposit>();
   final events = context.read<AccountEvents?>();
   return showModalBottomSheet<void>(
     context: context,
@@ -23,7 +23,7 @@ Future<void> showDepositSheet(BuildContext context) {
     showDragHandle: true,
     backgroundColor: AppColors.ground,
     builder: (_) => BlocProvider(
-      create: (_) => DepositCubit(deposits: repository),
+      create: (_) => DepositCubit(deposit: repository),
       child: BlocListener<DepositCubit, DepositState>(
         listenWhen: (_, current) => current is DepositDone,
         listener: (_, _) => events?.changed(),

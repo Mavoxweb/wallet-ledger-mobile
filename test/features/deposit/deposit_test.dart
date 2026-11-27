@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
+import 'package:wallet_ledger_mobile/features/deposit/domain/usecases/make_simulated_deposit.dart';
 import 'package:wallet_ledger_mobile/features/deposit/presentation/deposit_cubit.dart';
 import 'package:wallet_ledger_mobile/features/deposit/presentation/deposit_sheet.dart';
 
@@ -20,7 +21,7 @@ void main() {
         failures: [const NetworkFailure()],
       );
       final cubit = DepositCubit(
-        deposits: repository,
+        deposit: MakeSimulatedDeposit(repository),
         newIdempotencyKey: _keys(),
       );
 
@@ -38,7 +39,7 @@ void main() {
         failures: [const NetworkFailure()],
       );
       final cubit = DepositCubit(
-        deposits: repository,
+        deposit: MakeSimulatedDeposit(repository),
         newIdempotencyKey: _keys(),
       );
 
@@ -51,7 +52,7 @@ void main() {
 
     test(r'acima de R$ 1.000,00 nem chega na API', () async {
       final repository = FakeDepositRepository();
-      final cubit = DepositCubit(deposits: repository);
+      final cubit = DepositCubit(deposit: MakeSimulatedDeposit(repository));
 
       await cubit.submit(100001);
 
@@ -72,7 +73,8 @@ void main() {
         theme: buildAppTheme(),
         home: Scaffold(
           body: BlocProvider(
-            create: (_) => DepositCubit(deposits: repository),
+            create: (_) =>
+                DepositCubit(deposit: MakeSimulatedDeposit(repository)),
             child: const DepositSheet(),
           ),
         ),

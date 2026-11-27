@@ -1,11 +1,9 @@
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:wallet_ledger_mobile/app/use_case_scope.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/features/charge/domain/charge_repository.dart';
 import 'package:wallet_ledger_mobile/features/charge/presentation/charge_page.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
 
 import '../../helpers/fakes.dart';
 
@@ -14,11 +12,9 @@ Future<FakeChargeRepository> _pump(WidgetTester tester) async {
   await tester.pumpWidget(
     MaterialApp(
       theme: buildAppTheme(),
-      home: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<KeysRepository>.value(value: FakeKeysRepository()),
-          RepositoryProvider<ChargeRepository>.value(value: charges),
-        ],
+      home: UseCaseScope(
+        keys: FakeKeysRepository(),
+        charge: charges,
         child: const ChargePage(),
       ),
     ),
