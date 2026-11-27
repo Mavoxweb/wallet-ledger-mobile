@@ -3,9 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/features/keys/cubit/keys_cubit.dart';
-import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
-import 'package:wallet_ledger_mobile/features/keys/keys_page.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/presentation/cubit/keys_cubit.dart';
+import 'package:wallet_ledger_mobile/features/keys/presentation/keys_page.dart';
 
 import '../../helpers/fakes.dart';
 

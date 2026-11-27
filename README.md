@@ -96,7 +96,7 @@ Tela ──evento──▶ Bloc / Cubit ──▶ Repositório ──▶ Cliente
 lib/
 ├── app/        rotas (go_router) e injeção de dependências
 ├── core/       erros, rede, tema, movimento, dinheiro, widgets comuns
-└── features/   uma pasta por fluxo: data/ → bloc/ → view/
+└── features/   uma pasta por fluxo: domain/ (Dart puro) · data/ · presentation/
 packages/
 └── wallet_ledger_api/   cliente gerado (nunca editado à mão)
 ```

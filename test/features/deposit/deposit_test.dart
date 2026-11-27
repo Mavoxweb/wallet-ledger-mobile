@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/features/deposit/deposit_cubit.dart';
-import 'package:wallet_ledger_mobile/features/deposit/deposit_sheet.dart';
+import 'package:wallet_ledger_mobile/features/deposit/presentation/deposit_cubit.dart';
+import 'package:wallet_ledger_mobile/features/deposit/presentation/deposit_sheet.dart';
 
 import '../../helpers/fakes.dart';
 

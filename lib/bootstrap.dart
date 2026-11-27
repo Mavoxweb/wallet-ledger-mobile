@@ -7,13 +7,13 @@ import 'package:wallet_ledger_mobile/core/network/dio_factory.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/core/storage/token_store.dart';
-import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
-import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
-import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
-import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
-import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
-import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
-import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
+import 'package:wallet_ledger_mobile/features/account/data/api_account_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/data/api_auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
+import 'package:wallet_ledger_mobile/features/charge/data/api_charge_repository.dart';
+import 'package:wallet_ledger_mobile/features/deposit/data/api_deposit_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/data/api_keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/pix/data/api_pix_repository.dart';
 
 void bootstrap() {
   final env = Env.fromDefines();

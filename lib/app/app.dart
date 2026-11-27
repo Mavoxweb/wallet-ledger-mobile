@@ -11,13 +11,13 @@ import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
 import 'package:wallet_ledger_mobile/core/widgets/device_frame.dart';
-import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
-import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
-import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
-import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
-import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
-import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
-import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
+import 'package:wallet_ledger_mobile/features/charge/domain/charge_repository.dart';
+import 'package:wallet_ledger_mobile/features/deposit/domain/deposit_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/pix_repository.dart';
 
 /// Recebe as dependências prontas: do bootstrap em produção, dublês nos testes.
 class WalletLedgerApp extends StatefulWidget {

@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
-import 'package:wallet_ledger_mobile/features/statement/statement_page.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
+import 'package:wallet_ledger_mobile/features/statement/presentation/statement_page.dart';
 
 import '../../helpers/fakes.dart';
 

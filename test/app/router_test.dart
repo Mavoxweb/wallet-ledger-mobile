@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet_ledger_mobile/app/router.dart';
-import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
-import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/me.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 
 const _authenticated = SessionAuthenticated(
   Me(userId: 'u1', name: 'Ana', role: 'Customer', accountId: 'a1'),

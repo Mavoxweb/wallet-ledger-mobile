@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
-import 'package:wallet_ledger_mobile/features/pix/pix_key_detector.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/pix_key_detector.dart';
 
 void main() {
   test('e-mail, mesmo com espaços em volta', () {

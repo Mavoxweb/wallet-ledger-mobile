@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/statement/bloc/statement_bloc.dart';
+import 'package:wallet_ledger_mobile/features/statement/presentation/bloc/statement_bloc.dart';
 
 import '../../helpers/fakes.dart';
 

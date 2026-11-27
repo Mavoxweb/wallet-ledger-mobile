@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/widgets/glass_nav_bar.dart';
-import 'package:wallet_ledger_mobile/features/home/view/home_page.dart';
-import 'package:wallet_ledger_mobile/features/profile/profile_page.dart';
+import 'package:wallet_ledger_mobile/features/home/presentation/view/home_page.dart';
+import 'package:wallet_ledger_mobile/features/profile/presentation/profile_page.dart';
 
 import '../helpers/test_app.dart';
 

@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
-import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
-import 'package:wallet_ledger_mobile/features/auth/login/login_page.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/login/login_page.dart';
 
 class _MockAuthRepository extends Mock implements AuthRepository;
 

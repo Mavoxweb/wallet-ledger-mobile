@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
-import 'package:wallet_ledger_mobile/features/pix/pix_page.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/pix_repository.dart';
+import 'package:wallet_ledger_mobile/features/pix/presentation/pix_page.dart';
 
 import '../../helpers/fakes.dart';
 import '../../helpers/test_app.dart';

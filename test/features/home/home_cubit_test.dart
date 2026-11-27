@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/home/cubit/home_cubit.dart';
+import 'package:wallet_ledger_mobile/features/home/presentation/cubit/home_cubit.dart';
 
 import '../../helpers/fakes.dart';
 

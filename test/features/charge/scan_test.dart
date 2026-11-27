@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_ledger_mobile/features/charge/scan_page.dart';
+import 'package:wallet_ledger_mobile/features/charge/presentation/scan_page.dart';
 
 import '../../helpers/fakes.dart';
 
