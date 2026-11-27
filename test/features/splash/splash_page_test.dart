@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet_ledger_mobile/core/motion/motion.dart';
-import 'package:wallet_ledger_mobile/features/splash/splash_page.dart';
+import 'package:wallet_ledger_mobile/features/splash/presentation/splash_page.dart';
 
 import '../../helpers/test_app.dart';
 

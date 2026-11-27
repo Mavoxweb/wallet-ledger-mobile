@@ -6,8 +6,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:wallet_ledger_mobile/app/app.dart';
 import 'package:wallet_ledger_mobile/core/motion/motion.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
-import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
-import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/me.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 
 import 'fakes.dart';
 

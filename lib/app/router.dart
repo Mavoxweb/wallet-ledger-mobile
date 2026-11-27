@@ -5,17 +5,17 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/app/launch_gate.dart';
 import 'package:wallet_ledger_mobile/app/shell.dart';
 import 'package:wallet_ledger_mobile/core/motion/motion.dart';
-import 'package:wallet_ledger_mobile/features/auth/bloc/session_bloc.dart';
-import 'package:wallet_ledger_mobile/features/auth/login/login_page.dart';
-import 'package:wallet_ledger_mobile/features/auth/register/register_page.dart';
-import 'package:wallet_ledger_mobile/features/charge/charge_page.dart';
-import 'package:wallet_ledger_mobile/features/charge/scan_page.dart';
-import 'package:wallet_ledger_mobile/features/home/view/home_page.dart';
-import 'package:wallet_ledger_mobile/features/keys/keys_page.dart';
-import 'package:wallet_ledger_mobile/features/pix/pix_page.dart';
-import 'package:wallet_ledger_mobile/features/profile/profile_page.dart';
-import 'package:wallet_ledger_mobile/features/splash/splash_page.dart';
-import 'package:wallet_ledger_mobile/features/statement/statement_page.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/login/login_page.dart';
+import 'package:wallet_ledger_mobile/features/auth/presentation/register/register_page.dart';
+import 'package:wallet_ledger_mobile/features/charge/presentation/charge_page.dart';
+import 'package:wallet_ledger_mobile/features/charge/presentation/scan_page.dart';
+import 'package:wallet_ledger_mobile/features/home/presentation/view/home_page.dart';
+import 'package:wallet_ledger_mobile/features/keys/presentation/keys_page.dart';
+import 'package:wallet_ledger_mobile/features/pix/presentation/pix_page.dart';
+import 'package:wallet_ledger_mobile/features/profile/presentation/profile_page.dart';
+import 'package:wallet_ledger_mobile/features/splash/presentation/splash_page.dart';
+import 'package:wallet_ledger_mobile/features/statement/presentation/statement_page.dart';
 
 const _publicRoutes = {'/login', '/register'};
 

@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
-import 'package:wallet_ledger_mobile/features/charge/data/charge_repository.dart';
-import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
-import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
-import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/account.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
+import 'package:wallet_ledger_mobile/features/charge/domain/charge_repository.dart';
+import 'package:wallet_ledger_mobile/features/deposit/domain/deposit_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/pix_repository.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/pix_transfer.dart';
 
 export 'package:wallet_ledger_mobile/core/storage/prefs_store.dart'
     show InMemoryPrefsStore;

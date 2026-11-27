@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_ledger_mobile/features/account/data/account_repository.dart';
-import 'package:wallet_ledger_mobile/features/statement/group_by_day.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/account.dart';
+import 'package:wallet_ledger_mobile/features/statement/domain/group_by_day.dart';
 
 Movement _at(int id, DateTime createdAt) => Movement(
   postingId: id,

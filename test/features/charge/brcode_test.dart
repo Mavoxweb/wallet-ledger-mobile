@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wallet_ledger_mobile/features/charge/brcode.dart';
+import 'package:wallet_ledger_mobile/features/charge/domain/brcode.dart';
 
 // Exemplo de QR estático do Manual do BR Code (Banco Central do Brasil).
 // É o MESMO vetor dos testes da API: os dois lados conferem contra a mesma
