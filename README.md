@@ -7,6 +7,11 @@
 
 Um app de carteira digital em Flutter: saldo, Pix por chave ou QR code, extrato, cobrança e chaves Pix. Tudo isso conversando com uma [API .NET de verdade](https://github.com/Mavoxweb/wallet-ledger-api), com livro-razão de partidas dobradas.
 
+> **Faz parte do Wallet Ledger**
+> - [wallet-ledger-api](https://github.com/Mavoxweb/wallet-ledger-api): API .NET com razão de partidas dobradas, idempotência e auditoria
+> - **wallet-ledger-mobile**: este app, em Flutter
+> - [wallet-ledger-backoffice](https://github.com/Mavoxweb/wallet-ledger-backoffice): painel da operação em Angular (busca de contas, bloqueio, estorno, auditoria)
+
 <p align="center">
   <img src="docs/media/intro.gif" width="250" alt="Animação de entrada, login e tela inicial">
   &nbsp;
