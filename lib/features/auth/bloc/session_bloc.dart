@@ -3,10 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/auth/data/auth_repository.dart';
 
-// ---------------------------------------------------------------- Eventos ---
-// Um Bloc recebe EVENTOS (o que aconteceu) e emite ESTADOS (como a tela deve
-// estar). A tela nunca muda o estado direto: ela só avisa o que aconteceu.
-
 sealed class SessionEvent extends Equatable {
   const new();
 
@@ -34,8 +30,6 @@ final class SessionExpired extends SessionEvent {
   const new();
 }
 
-// ---------------------------------------------------------------- Estados ---
-
 sealed class SessionState extends Equatable {
   const new();
 
@@ -60,8 +54,6 @@ final class SessionAuthenticated extends SessionState {
 final class SessionUnauthenticated extends SessionState {
   const new();
 }
-
-// ------------------------------------------------------------------- Bloc ---
 
 class SessionBloc extends Bloc<SessionEvent, SessionState> {
   new(this._repository) : super(const SessionUnknown()) {

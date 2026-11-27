@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// Par de tokens da sessão.
 class Tokens {
   const new({
     required this.accessToken,
@@ -28,9 +27,6 @@ class Tokens {
 }
 
 /// Onde a sessão fica guardada entre aberturas do app.
-///
-/// `abstract interface class` = um contrato: quem implementa precisa ter estes
-/// métodos, mas não herda código. Os testes usam a versão em memória.
 abstract interface class TokenStore {
   Future<Tokens?> read();
   Future<void> write(Tokens tokens);

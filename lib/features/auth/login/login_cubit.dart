@@ -39,8 +39,6 @@ class LoginState extends Equatable {
   List<Object?> get props => [email, password, status, failure];
 }
 
-/// Um `Cubit` é um Bloc sem eventos: a tela chama métodos direto. Serve bem
-/// para formulários, em que "o que aconteceu" é só "o campo mudou".
 class LoginCubit extends Cubit<LoginState> {
   new(this._repository) : super(const LoginState());
 

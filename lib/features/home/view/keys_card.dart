@@ -3,7 +3,6 @@ import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 
-/// Resumo das chaves Pix da conta.
 class KeysCard extends StatelessWidget {
   const new({required this.keys, super.key});
 

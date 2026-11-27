@@ -1,14 +1,12 @@
 import 'package:flutter/painting.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 
-/// Famílias embutidas em assets/fonts (declaradas no pubspec.yaml).
 abstract final class AppFonts {
   static const display = 'SpaceGrotesk';
   static const text = 'Inter';
 }
 
-/// Estilos de texto do app. A regra do protótipo: tracking (letter-spacing)
-/// negativo em texto grande, neutro em texto pequeno.
+/// Tracking negativo em texto grande, neutro em texto pequeno.
 abstract final class AppText {
   static const display = TextStyle(
     fontFamily: AppFonts.display,

@@ -145,7 +145,6 @@ class _StatementViewState extends State<_StatementView> {
         return [
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-            // `SliverList.builder` só constrói os dias que aparecem na tela.
             sliver: SliverList.builder(
               itemCount: groups.length,
               itemBuilder: (context, i) => _DaySection(group: groups[i]),
@@ -212,7 +211,6 @@ class _Header extends StatelessWidget {
   }
 }
 
-/// Cabeçalho do dia + as movimentações dele num painel branco.
 class _DaySection extends StatelessWidget {
   const new({required this.group});
 

@@ -19,10 +19,8 @@ import 'package:wallet_ledger_mobile/features/statement/statement_page.dart';
 
 const _publicRoutes = {'/login', '/register'};
 
-/// Para onde mandar a pessoa. Função pura: fácil de testar sem montar o app.
-///
-/// Enquanto a entrada não terminou (`launchReady` falso), tudo fica na
-/// `/splash`. Depois, quem decide é a sessão.
+/// Função pura, para testar sem montar o app. Até a entrada terminar
+/// (`launchReady` falso), tudo fica em `/splash`.
 String? sessionRedirect(
   SessionState session,
   String location, {
@@ -55,7 +53,6 @@ GoRouter createRouter(SessionBloc session, LaunchGate launch) => GoRouter(
     GoRoute(path: '/splash', builder: (_, _) => const SplashPage()),
     GoRoute(path: '/login', builder: (_, _) => const LoginPage()),
     GoRoute(path: '/register', builder: (_, _) => const RegisterPage()),
-    // Pix: folha que sobe de baixo e volta pelo mesmo caminho.
     GoRoute(
       path: '/pix',
       pageBuilder: (context, state) => CustomTransitionPage<void>(
@@ -81,7 +78,6 @@ GoRouter createRouter(SessionBloc session, LaunchGate launch) => GoRouter(
         },
       ),
     ),
-    // Leitor de QR code: tela cheia, fora das abas.
     GoRoute(
       path: '/scan',
       pageBuilder: (context, state) => CustomTransitionPage<void>(

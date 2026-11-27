@@ -1,10 +1,6 @@
 import 'package:flutter/painting.dart';
 
-/// Paleta aprovada no protótipo. Toda cor do app sai daqui: nenhuma tela usa
-/// `Color(0xFF…)` solto, assim uma mudança de marca é feita num lugar só.
-///
-/// `abstract final class` = não dá para instanciar nem herdar; serve só como
-/// "namespace" de constantes.
+/// Toda cor do app sai daqui: nenhuma tela usa `Color(0xFF…)` solto.
 abstract final class AppColors {
   /// Fundo das telas.
   static const ground = Color(0xFFF4F5F1);
@@ -51,8 +47,7 @@ abstract final class AppSpacing {
   static const xxl = 32.0;
 }
 
-/// Sombras macias em camadas, no lugar de bordas (acabamento premium do
-/// protótipo). Cada sombra é uma lista: uma curta e firme, outra longa e leve.
+/// Sombras em camadas no lugar de bordas: uma curta e firme, outra longa.
 abstract final class AppShadows {
   static const _ink = Color(0xFF0F1413);
 

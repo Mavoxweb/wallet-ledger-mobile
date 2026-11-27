@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:wallet_ledger_mobile/core/config/env.dart';
 
-/// Cliente HTTP base do app. O cliente gerado (`wallet_ledger_api`) recebe
-/// este Dio pronto; os interceptors de autenticação entram depois (PR 3).
+/// Cliente HTTP base; o cliente gerado recebe este Dio pronto.
 Dio createDio(Env env) {
   return Dio(
     BaseOptions(

@@ -11,7 +11,6 @@ class PixKeyItem extends Equatable {
   final PixKeyKind kind;
   final String value;
 
-  /// Como a chave aparece para a pessoa.
   String get label => switch (kind) {
     PixKeyKind.email => value,
     PixKeyKind.phone => value,
@@ -22,7 +21,6 @@ class PixKeyItem extends Equatable {
   List<Object?> get props => [id, kind, value];
 }
 
-/// Chaves Pix da conta (até 5).
 abstract interface class KeysRepository {
   Future<List<PixKeyItem>> list();
 

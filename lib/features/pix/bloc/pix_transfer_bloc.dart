@@ -8,8 +8,6 @@ import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/pix_key_detector.dart';
 
-// ---------------------------------------------------------------- eventos
-
 sealed class PixEvent extends Equatable {
   const new();
 
@@ -60,8 +58,6 @@ final class BackRequested extends PixEvent {
 final class Reset extends PixEvent {
   const new();
 }
-
-// ---------------------------------------------------------------- estados
 
 /// Tudo o que vai para a API num envio. A [idempotencyKey] nasce junto com o
 /// pedido, na etapa de confirmação.
@@ -125,7 +121,6 @@ final class PixAmountStep extends PixState {
   final int amountCents;
   final String? description;
 
-  /// O valor veio fixo no QR code e não pode ser mudado.
   final bool locked;
 
   @override
@@ -181,14 +176,8 @@ final class PixFailed extends PixState {
   List<Object?> get props => [order, failure, canRetry];
 }
 
-// ---------------------------------------------------------------- bloc
-
-/// O fluxo do Pix em etapas: chave → valor → confirmação → comprovante.
-///
-/// Cada evento só tem efeito na etapa certa (confirmar sem ter passado pelo
-/// valor é ignorado), e os eventos são processados **um de cada vez**
-/// (`sequential`): um segundo toque em "Confirmar" espera o primeiro terminar
-/// e, como a etapa já mudou, não faz nada.
+/// Eventos processados um de cada vez (`sequential`): um segundo toque em
+/// "Confirmar" espera o primeiro e, como a etapa já mudou, não faz nada.
 class PixTransferBloc extends Bloc<PixEvent, PixState> {
   new({
     required this._pix,

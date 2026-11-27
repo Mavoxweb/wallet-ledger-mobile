@@ -13,7 +13,6 @@ import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
 import 'package:wallet_ledger_mobile/features/pix/bloc/pix_transfer_bloc.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/step_layout.dart';
 
-/// Etapa 2: o valor (teclado próprio) e uma mensagem opcional.
 class AmountStep extends StatefulWidget {
   const new({required this.state, super.key});
 

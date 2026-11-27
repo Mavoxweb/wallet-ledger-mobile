@@ -22,7 +22,6 @@ class PixRecipient extends Equatable {
   List<Object?> get props => [keyType, keyValue, maskedName, maskedCpf];
 }
 
-/// Comprovante do Pix enviado.
 class PixReceipt extends Equatable {
   const new({
     required this.transactionId,

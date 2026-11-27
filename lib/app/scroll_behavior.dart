@@ -2,9 +2,7 @@ import 'dart:ui' show PointerDeviceKind;
 
 import 'package:material_ui/material_ui.dart';
 
-/// Por padrão, o Flutter só deixa arrastar listas e carrosséis com o dedo.
-/// Na demo web, aberta no computador, o carrossel de cartões ficaria preso:
-/// aqui o mouse e o trackpad também arrastam.
+/// Na demo web, o mouse e o trackpad também arrastam (por padrão, só o dedo).
 class AppScrollBehavior extends MaterialScrollBehavior {
   const new();
 

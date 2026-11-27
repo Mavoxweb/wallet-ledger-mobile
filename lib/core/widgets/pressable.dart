@@ -1,10 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/motion/motion.dart';
 
-/// Qualquer coisa tocável que "afunda" levemente no toque.
-///
-/// A escala reage no *toque para baixo* (`onTapDown`), não quando o dedo sai:
-/// esperar o fim do toque faz a interface parecer surda.
+/// Afunda no toque para baixo (`onTapDown`), não quando o dedo sai.
 class Pressable extends StatefulWidget {
   const new({
     required this.child,

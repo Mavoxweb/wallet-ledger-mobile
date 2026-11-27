@@ -5,7 +5,6 @@ import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/pressable.dart';
 
-/// Um destino da barra.
 class NavDestination {
   const new({required this.label, required this.icon});
 
@@ -13,10 +12,7 @@ class NavDestination {
   final IconData icon;
 }
 
-/// Barra inferior flutuante em vidro fosco, com o botão Pix saltado no centro.
-///
-/// As quatro abas ficam duas de cada lado; o Pix, função principal, ganha o
-/// lugar de destaque. O conteúdo da tela passa por baixo da barra, desfocado.
+/// Barra flutuante em vidro fosco, com o Pix em destaque no centro.
 class GlassNavBar extends StatelessWidget {
   const new({
     required this.destinations,
@@ -174,7 +170,6 @@ class _PixButton extends StatelessWidget {
               height: 64,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                // Brilho sutil no alto, como luz batendo num botão de verdade.
                 gradient: const RadialGradient(
                   center: Alignment(-0.4, -0.6),
                   radius: 1,

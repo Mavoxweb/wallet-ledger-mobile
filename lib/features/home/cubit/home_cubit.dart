@@ -97,7 +97,6 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> _fetch({bool keepOnFailure = false}) async {
     try {
-      // As quatro buscas saem ao mesmo tempo; o record espera todas.
       final (account, page, keys, hidden) = await (
         _accounts.account(),
         _accounts.statement(limit: recentCount),
@@ -113,9 +112,7 @@ class HomeCubit extends Cubit<HomeState> {
           balanceHidden: hidden,
         ),
       );
-      // `.wait` num record dispara as buscas juntas e, se alguma falhar,
-      // agrupa os erros num ParallelWaitError. Pegar esse Error aqui é o uso
-      // documentado da API; dentro dele está a nossa Failure.
+      // `.wait` num record junta as falhas num ParallelWaitError.
       // ignore: avoid_catching_errors
     } on ParallelWaitError<dynamic, dynamic> catch (e) {
       final failure = _firstFailure(e) ?? const NetworkFailure();

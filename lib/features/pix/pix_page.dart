@@ -26,7 +26,6 @@ class PixPrefill {
   final int? amountCents;
 }
 
-/// Fluxo Pix: abre como uma folha que sobe de baixo (rota `/pix`).
 class PixPage extends StatelessWidget {
   const new({super.key, this.prefill});
 
@@ -61,7 +60,6 @@ class _PixFlow extends StatelessWidget {
       listenWhen: (previous, current) =>
           current is PixDone && previous is! PixDone,
       listener: (context, state) {
-        // Vibração curta junto com o check: o sucesso também se sente.
         unawaited(HapticFeedback.mediumImpact());
         context.read<AccountEvents?>()?.changed();
       },
@@ -134,8 +132,6 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-/// Troca de etapa com fade e um deslize curto. Com movimento reduzido, só o
-/// fade.
 class _StepSwitcher extends StatelessWidget {
   const new({required this.state});
 

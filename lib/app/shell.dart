@@ -10,7 +10,6 @@ const _destinations = [
   NavDestination(label: 'Perfil', icon: Icons.person_outline_rounded),
 ];
 
-/// Casca das quatro abas, com a barra flutuante por cima do conteúdo.
 class AppShell extends StatelessWidget {
   const new({required this.navigationShell, super.key});
 
@@ -29,8 +28,7 @@ class AppShell extends StatelessWidget {
             child: GlassNavBar(
               destinations: _destinations,
               currentIndex: navigationShell.currentIndex,
-              // Tocar na aba atual volta ao topo dela,
-              // como nos apps do sistema.
+              // Tocar na aba atual volta ao topo.
               onSelected: (index) => navigationShell.goBranch(
                 index,
                 initialLocation: index == navigationShell.currentIndex,
@@ -44,8 +42,7 @@ class AppShell extends StatelessWidget {
   }
 }
 
-/// Mantém as quatro abas vivas (cada uma guarda rolagem e estado) e troca
-/// entre elas com fade + deslize curto. Com movimento reduzido, só fade.
+/// Mantém as abas vivas para cada uma guardar rolagem e estado.
 class AnimatedBranchContainer extends StatelessWidget {
   const new({required this.currentIndex, required this.children, super.key});
 
@@ -71,9 +68,7 @@ class AnimatedBranchContainer extends StatelessWidget {
                     : const Offset(0, 0.01),
                 duration: AppMotion.tab,
                 curve: AppCurves.easeOut,
-                // O TickerMode pausa só o conteúdo das abas escondidas.
-                // Ele fica por dentro do fade: por fora, pausaria também a
-                // animação de saída, e a aba antiga ficaria opaca por cima.
+                // Dentro do fade: por fora, pausaria a animação de saída.
                 child: TickerMode(
                   enabled: i == currentIndex,
                   child: children[i],

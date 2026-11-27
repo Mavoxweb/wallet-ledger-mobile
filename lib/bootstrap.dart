@@ -15,7 +15,6 @@ import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
-/// Monta as dependências do app (a "composição") e o inicia.
 void bootstrap() {
   final env = Env.fromDefines();
   final store = SecureTokenStore();

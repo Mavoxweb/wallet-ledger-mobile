@@ -3,8 +3,6 @@ import 'package:wallet_ledger_api/wallet_ledger_api.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/storage/token_store.dart';
 
-/// Quem está logado. `Equatable` faz dois objetos com os mesmos dados serem
-/// iguais (`==`), o que o Bloc usa para não redesenhar à toa.
 class Me extends Equatable {
   const new({
     required this.userId,
@@ -38,7 +36,6 @@ abstract interface class AuthRepository {
   Future<void> clearSession();
 }
 
-/// Implementação que fala com a API. Erros saem como [Failure].
 class ApiAuthRepository implements AuthRepository {
   new({required this._api, required this._store, DateTime Function()? now})
     : _now = now ?? DateTime.now;
@@ -47,7 +44,6 @@ class ApiAuthRepository implements AuthRepository {
   final TokenStore _store;
   final DateTime Function() _now;
 
-  /// Converte a resposta de login/refresh em [Tokens].
   static Tokens toTokens(TokenResponse r, DateTime now) => Tokens(
     accessToken: r.accessToken,
     refreshToken: r.refreshToken,

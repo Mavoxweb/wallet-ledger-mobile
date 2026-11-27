@@ -1,9 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-/// Valor digitado no teclado do Pix, sempre em centavos (nunca `double`).
-///
-/// Funciona como a maquininha de cartão: cada dígito entra pela direita e
-/// empurra os outros. 1 → 0,01; 12 → 0,12; 1234 → 12,34.
+/// Valor do teclado em centavos. Cada dígito entra pela direita:
+/// 1 → 0,01; 12 → 0,12; 1234 → 12,34.
 class AmountInput extends Equatable {
   const new({this.cents = 0});
 

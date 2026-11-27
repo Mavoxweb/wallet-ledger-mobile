@@ -20,7 +20,6 @@ const _months = [
   'dezembro',
 ];
 
-/// As movimentações de um mesmo dia, com o rótulo do cabeçalho.
 class DayGroup {
   const new({required this.label, required this.items});
 
@@ -50,7 +49,6 @@ List<DayGroup> groupByDay(List<Movement> items, DateTime now) {
   return groups;
 }
 
-/// Hora no fuso de Brasília: `23:05`.
 String timeOfDay(DateTime instant) {
   final wall = _wall(instant);
   String two(int n) => n.toString().padLeft(2, '0');

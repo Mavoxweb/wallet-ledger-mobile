@@ -19,8 +19,7 @@ import 'package:wallet_ledger_mobile/features/deposit/deposit_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/data/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/data/pix_repository.dart';
 
-/// Raiz do app. Recebe as dependências prontas (do bootstrap em produção, de
-/// dublês nos testes) e as entrega à árvore de widgets.
+/// Recebe as dependências prontas: do bootstrap em produção, dublês nos testes.
 class WalletLedgerApp extends StatefulWidget {
   const new({
     required this.authRepository,

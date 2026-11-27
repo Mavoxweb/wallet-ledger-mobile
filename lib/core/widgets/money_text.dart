@@ -2,8 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/money/money_format.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 
-/// Valor em destaque: "R$" pequeno, reais grandes e centavos menores,
-/// como nos extratos de banco premium.
+/// "R$" pequeno, reais grandes e centavos menores.
 class MoneyText extends StatelessWidget {
   const new({
     required this.cents,

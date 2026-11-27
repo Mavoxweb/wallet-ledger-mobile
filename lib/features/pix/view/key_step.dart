@@ -10,7 +10,6 @@ import 'package:wallet_ledger_mobile/features/pix/bloc/pix_transfer_bloc.dart';
 import 'package:wallet_ledger_mobile/features/pix/pix_key_detector.dart';
 import 'package:wallet_ledger_mobile/features/pix/view/step_layout.dart';
 
-/// Etapa 1: a chave de quem vai receber.
 class KeyStep extends StatefulWidget {
   const new({required this.state, super.key});
 

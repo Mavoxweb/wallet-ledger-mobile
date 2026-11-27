@@ -1,9 +1,5 @@
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 
-/// Texto para a pessoa, a partir do código estável da API.
-///
-/// Regra de escrita: o que aconteceu + o que fazer agora, em linguagem simples,
-/// sem culpar quem está usando e sem termos técnicos.
 const _byCode = <String, String>{
   'invalid_credentials': 'E-mail ou senha incorretos. Confira e tente de novo.',
   'invalid_refresh_token': 'Sua sessão expirou. Entre de novo para continuar.',

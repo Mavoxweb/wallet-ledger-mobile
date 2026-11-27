@@ -68,14 +68,12 @@ class _Key extends StatelessWidget {
       pressedScale: 0.92,
       semanticLabel: label,
       onTap: () {
-        // Um "clique" leve a cada tecla, como num teclado de verdade.
         unawaited(HapticFeedback.selectionClick());
         onTap();
       },
       child: Container(
         height: 60,
         alignment: Alignment.center,
-        // Área de toque inteira, não só o número.
         color: Colors.transparent,
         child: MediaQuery.withClampedTextScaling(
           maxScaleFactor: 1.4,

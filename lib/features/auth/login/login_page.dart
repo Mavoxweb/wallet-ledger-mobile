@@ -14,7 +14,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // O Cubit nasce com a tela e morre com ela (BlocProvider cuida disso).
     return BlocProvider(
       create: (context) => LoginCubit(context.read<AuthRepository>()),
       child: BlocListener<LoginCubit, LoginState>(

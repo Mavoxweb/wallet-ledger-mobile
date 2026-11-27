@@ -1,8 +1,6 @@
 import 'package:wallet_ledger_api/wallet_ledger_api.dart' as api;
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 
-/// Cobranças Pix: a API monta o BR Code ("Pix Copia e Cola") de uma chave da
-/// conta, com valor fixo ou livre.
 abstract interface class ChargeRepository {
   Future<String> create({required String keyId, int? amountCents});
 }

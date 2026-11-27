@@ -1,9 +1,6 @@
 import 'package:dio/dio.dart';
 
 /// Tudo o que pode dar errado ao falar com a API, já traduzido do HTTP.
-///
-/// `sealed` = a lista de subtipos é fechada neste arquivo. Num `switch`, o
-/// compilador avisa se algum caso ficou de fora.
 sealed class Failure implements Exception {
   const new();
 }
@@ -30,7 +27,6 @@ final class NetworkFailure extends Failure {
   const new();
 }
 
-/// Converte o erro do Dio numa [Failure].
 Failure mapDioError(DioException error) {
   switch (error.type) {
     case DioExceptionType.connectionError:
