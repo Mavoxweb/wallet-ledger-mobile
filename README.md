@@ -3,7 +3,7 @@
 [![CI](https://github.com/Mavoxweb/wallet-ledger-mobile/actions/workflows/ci.yml/badge.svg)](https://github.com/Mavoxweb/wallet-ledger-mobile/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Mavoxweb/wallet-ledger-mobile?label=APK)](https://github.com/Mavoxweb/wallet-ledger-mobile/releases/latest)
 ![Flutter 3.50](https://img.shields.io/badge/Flutter-3.50-02569B?logo=flutter&logoColor=white)
-![Testes](https://img.shields.io/badge/testes-136-2ea44f)
+![Testes](https://img.shields.io/badge/testes-143-2ea44f)
 
 Um app de carteira digital em Flutter: saldo, Pix por chave ou QR code, extrato, cobrança e chaves Pix. Tudo isso conversando com uma [API .NET de verdade](https://github.com/Mavoxweb/wallet-ledger-api), com livro-razão de partidas dobradas.
 
@@ -83,14 +83,18 @@ Uma regra decide quando a chave muda: se a pessoa voltar e trocar o valor, o des
 
 ## Por dentro
 
+Clean Architecture, com três camadas por feature:
+
 ```
-Tela ──evento──▶ Bloc / Cubit ──▶ Repositório ──▶ Cliente gerado (Dio) ──▶ API
-  ◀────estado────┘                    ◀── Failure: Api / Network / Validation
+presentation            domain (Dart puro)                 data
+Tela ─▶ Bloc/Cubit ─▶ Caso de uso ─▶ Repositório (contrato) ◀── ApiRepositório ─▶ Cliente gerado ─▶ API
+  ◀──estado──┘            ◀── Failure: Api / Network / Validation
 ```
 
-- **Telas só desenham.** O comportamento mora nos Blocs e Cubits, que são testados com repositórios falsos, sem abrir tela nenhuma.
+- **Telas só desenham.** O comportamento mora nos Blocs e Cubits, e as telas só conhecem casos de uso (`SendPix`, `AddPixKey`…), nunca repositórios.
+- **O domínio não sabe de onde vem o dado.** Entidades, contratos e casos de uso não importam Flutter, Dio nem o cliente gerado. Quem garante isso é um teste: se alguém importar, o CI quebra.
+- **A regra mora no caso de uso.** O `AddPixKey` recusa a sexta chave sem chamar a API. Só o que depende da etapa do fluxo fica no Bloc, como o reuso da chave de idempotência no Pix.
 - **O cliente HTTP é gerado** do contrato OpenAPI publicado pela API. Se a API mudar e o app não acompanhar, o CI quebra antes de alguém perceber em produção.
-- **Os repositórios traduzem** os modelos gerados para modelos do app. As telas nunca dependem do formato da API.
 
 ```
 lib/
@@ -104,7 +108,8 @@ packages/
 As decisões maiores estão registradas como ADRs:
 [0001 — Bloc e Cubit](docs/adr/0001-bloc.md) ·
 [0002 — Cliente gerado](docs/adr/0002-cliente-gerado.md) ·
-[0003 — Movimento e acessibilidade](docs/adr/0003-movimento.md)
+[0003 — Movimento e acessibilidade](docs/adr/0003-movimento.md) ·
+[0004 — Clean Architecture](docs/adr/0004-clean-architecture.md)
 
 ## Rodando na sua máquina
 
@@ -126,8 +131,9 @@ flutter analyze
 flutter test
 ```
 
-São 136 testes:
-- regras puras (BR Code, campo de valor, agrupamento do extrato por dia);
+São 143 testes:
+- arquitetura (o domínio não importa Flutter, Dio nem o cliente gerado; as telas não leem repositórios);
+- regras puras e casos de uso (BR Code, campo de valor, agrupamento do extrato por dia, limite de chaves);
 - Blocs e Cubits com `bloc_test` e `mocktail` (reuso da chave de idempotência, limite de chaves, teto do depósito);
 - testes de widget dos fluxos completos, inclusive com texto em 200% e movimento reduzido.
 

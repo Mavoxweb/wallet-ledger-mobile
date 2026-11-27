@@ -1,13 +1,13 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:wallet_ledger_mobile/app/use_case_scope.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
-import 'package:wallet_ledger_mobile/features/keys/presentation/cubit/keys_cubit.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/add_pix_key.dart';
 import 'package:wallet_ledger_mobile/features/keys/presentation/keys_page.dart';
 
+import '../../helpers/blocs.dart';
 import '../../helpers/fakes.dart';
 
 List<PixKeyItem> _five() => [
@@ -21,10 +21,7 @@ Future<void> _pump(WidgetTester tester, FakeKeysRepository keys) async {
   await tester.pumpWidget(
     MaterialApp(
       theme: buildAppTheme(),
-      home: RepositoryProvider<KeysRepository>.value(
-        value: keys,
-        child: const KeysPage(),
-      ),
+      home: UseCaseScope(keys: keys, child: const KeysPage()),
     ),
   );
   await tester.pumpAndSettle();
@@ -34,20 +31,20 @@ void main() {
   group('KeysCubit', () {
     test('a sexta chave mostra o limite sem chamar a API', () async {
       final repository = FakeKeysRepository(keys: _five());
-      final cubit = KeysCubit(keys: repository);
+      final cubit = keysCubitFor(repository);
       await cubit.load();
 
       final ok = await cubit.create(PixKeyKind.evp, null);
 
       expect(ok, isFalse);
-      expect(cubit.state.failure, KeysCubit.limitFailure);
+      expect(cubit.state.failure, AddPixKey.limitFailure);
       expect(repository.created, isEmpty);
       await cubit.close();
     });
 
     test('chave já cadastrada em outra conta vira erro na tela', () async {
       const taken = ApiFailure(code: 'pix_key_taken', message: '', status: 409);
-      final cubit = KeysCubit(keys: FakeKeysRepository(createFailure: taken));
+      final cubit = keysCubitFor(FakeKeysRepository(createFailure: taken));
       await cubit.load();
 
       final ok = await cubit.create(PixKeyKind.email, 'bruno@walletledger.dev');
@@ -59,7 +56,7 @@ void main() {
     });
 
     test('cadastrar acrescenta na lista', () async {
-      final cubit = KeysCubit(keys: FakeKeysRepository());
+      final cubit = keysCubitFor(FakeKeysRepository());
       await cubit.load();
 
       expect(await cubit.create(PixKeyKind.evp, null), isTrue);

@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/usecases/lookup_pix_key.dart';
+import 'package:wallet_ledger_mobile/features/pix/domain/usecases/send_pix.dart';
 import 'package:wallet_ledger_mobile/features/pix/presentation/bloc/pix_transfer_bloc.dart';
 
 import '../../helpers/fakes.dart';
@@ -12,8 +14,11 @@ String Function() _keys() {
   return () => 'key-${++n}';
 }
 
-PixTransferBloc _bloc(FakePixRepository pix) =>
-    PixTransferBloc(pix: pix, newIdempotencyKey: _keys());
+PixTransferBloc _bloc(FakePixRepository pix) => PixTransferBloc(
+  lookup: LookupPixKey(pix),
+  sendPix: SendPix(pix),
+  newIdempotencyKey: _keys(),
+);
 
 void main() {
   blocTest<PixTransferBloc, PixState>(
@@ -152,7 +157,8 @@ void main() {
     final pix = FakePixRepository();
     final bloc =
         PixTransferBloc(
-            pix: pix,
+            lookup: LookupPixKey(pix),
+            sendPix: SendPix(pix),
             biometrics: FakeBiometricGate(available: true, approve: false),
           )
           ..add(const KeySubmitted('bruno@walletledger.dev'))
@@ -168,7 +174,8 @@ void main() {
   blocTest<PixTransferBloc, PixState>(
     'QR com valor: o valor vem travado e outro valor é ignorado',
     build: () => PixTransferBloc(
-      pix: FakePixRepository(),
+      lookup: LookupPixKey(FakePixRepository()),
+      sendPix: SendPix(FakePixRepository()),
       newIdempotencyKey: _keys(),
       lockedAmountCents: 1050,
     ),

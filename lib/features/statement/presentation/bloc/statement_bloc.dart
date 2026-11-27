@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/account/domain/account.dart';
-import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_statement.dart';
 
 sealed class StatementEvent extends Equatable {
   const new();
@@ -122,7 +122,7 @@ class StatementState extends Equatable {
 }
 
 class StatementBloc extends Bloc<StatementEvent, StatementState> {
-  new({required this._accounts, Stream<void>? accountChanges})
+  new({required this._getStatement, Stream<void>? accountChanges})
     : super(const StatementState()) {
     _changes = accountChanges?.listen((_) => add(const StatementRefreshed()));
     on<StatementStarted>(_onStarted);
@@ -133,7 +133,7 @@ class StatementBloc extends Bloc<StatementEvent, StatementState> {
     );
   }
 
-  final AccountRepository _accounts;
+  final GetStatement _getStatement;
   StreamSubscription<void>? _changes;
 
   @override
@@ -150,7 +150,7 @@ class StatementBloc extends Bloc<StatementEvent, StatementState> {
   ) async {
     emit(StatementState(filter: state.filter));
     try {
-      final first = await _accounts.statement();
+      final first = await _getStatement();
       emit(_firstPage(first));
     } on Failure catch (failure) {
       emit(
@@ -164,7 +164,7 @@ class StatementBloc extends Bloc<StatementEvent, StatementState> {
     Emitter<StatementState> emit,
   ) async {
     try {
-      final first = await _accounts.statement();
+      final first = await _getStatement();
       emit(_firstPage(first));
     } on Failure catch (failure) {
       // Com lista na tela, uma falha ao atualizar não apaga nada.
@@ -191,7 +191,7 @@ class StatementBloc extends Bloc<StatementEvent, StatementState> {
     emit(state.copyWith(isLoadingMore: true, loadMoreFailed: false));
 
     try {
-      final next = await _accounts.statement(cursor: state.nextCursor);
+      final next = await _getStatement(cursor: state.nextCursor);
       // Por segurança, não repete um lançamento que já está na lista.
       final seen = {for (final m in state.items) m.postingId};
       emit(

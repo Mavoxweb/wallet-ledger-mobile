@@ -5,7 +5,7 @@ import 'package:wallet_ledger_mobile/core/errors/error_messages.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
-import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/register.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/register/register_cubit.dart';
 
@@ -15,7 +15,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RegisterCubit(context.read<AuthRepository>()),
+      create: (context) => RegisterCubit(context.read<Register>()),
       child: BlocListener<RegisterCubit, RegisterState>(
         listenWhen: (_, current) => current.status == RegisterStatus.success,
         listener: (context, _) =>

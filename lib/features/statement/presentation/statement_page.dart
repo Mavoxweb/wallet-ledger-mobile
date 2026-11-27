@@ -8,7 +8,7 @@ import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/empty_state.dart';
 import 'package:wallet_ledger_mobile/core/widgets/glass_nav_bar.dart';
-import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_statement.dart';
 import 'package:wallet_ledger_mobile/features/home/presentation/view/movement_tile.dart';
 import 'package:wallet_ledger_mobile/features/statement/domain/group_by_day.dart';
 import 'package:wallet_ledger_mobile/features/statement/presentation/bloc/statement_bloc.dart';
@@ -24,7 +24,7 @@ class StatementPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => StatementBloc(
-        accounts: context.read<AccountRepository>(),
+        getStatement: context.read<GetStatement>(),
         accountChanges: context.read<AccountEvents?>()?.changes,
       )..add(const StatementStarted()),
       child: _StatementView(clock: clock),

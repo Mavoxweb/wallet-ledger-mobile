@@ -1,7 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_account.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_statement.dart';
 import 'package:wallet_ledger_mobile/features/home/presentation/cubit/home_cubit.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/list_pix_keys.dart';
 
 import '../../helpers/fakes.dart';
 
@@ -9,8 +12,9 @@ void main() {
   blocTest<HomeCubit, HomeState>(
     'carrega saldo, 3 movimentações e as chaves Pix',
     build: () => HomeCubit(
-      accounts: FakeAccountRepository(),
-      keys: FakeKeysRepository(),
+      getAccount: GetAccount(FakeAccountRepository()),
+      getStatement: GetStatement(FakeAccountRepository()),
+      listKeys: ListPixKeys(FakeKeysRepository()),
       prefs: InMemoryPrefsStore(),
     ),
     act: (cubit) => cubit.load(),
@@ -27,8 +31,9 @@ void main() {
   blocTest<HomeCubit, HomeState>(
     'ocultar o saldo lembra a preferência',
     build: () => HomeCubit(
-      accounts: FakeAccountRepository(),
-      keys: FakeKeysRepository(),
+      getAccount: GetAccount(FakeAccountRepository()),
+      getStatement: GetStatement(FakeAccountRepository()),
+      listKeys: ListPixKeys(FakeKeysRepository()),
       prefs: prefs,
     ),
     act: (cubit) async {
@@ -45,8 +50,13 @@ void main() {
   blocTest<HomeCubit, HomeState>(
     'falha ao carregar mostra o erro',
     build: () => HomeCubit(
-      accounts: FakeAccountRepository(failure: const NetworkFailure()),
-      keys: FakeKeysRepository(),
+      getAccount: GetAccount(
+        FakeAccountRepository(failure: const NetworkFailure()),
+      ),
+      getStatement: GetStatement(
+        FakeAccountRepository(failure: const NetworkFailure()),
+      ),
+      listKeys: ListPixKeys(FakeKeysRepository()),
       prefs: InMemoryPrefsStore(),
     ),
     act: (cubit) => cubit.load(),
@@ -56,8 +66,9 @@ void main() {
   test('atualizar consulta de novo sem passar pelo carregando', () async {
     final accounts = FakeAccountRepository();
     final cubit = HomeCubit(
-      accounts: accounts,
-      keys: FakeKeysRepository(),
+      getAccount: GetAccount(accounts),
+      getStatement: GetStatement(accounts),
+      listKeys: ListPixKeys(FakeKeysRepository()),
       prefs: InMemoryPrefsStore(),
     );
     final states = <HomeState>[];

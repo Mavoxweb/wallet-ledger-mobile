@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:wallet_ledger_mobile/app/use_case_scope.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
-import 'package:wallet_ledger_mobile/features/pix/domain/pix_repository.dart';
 import 'package:wallet_ledger_mobile/features/pix/presentation/pix_page.dart';
 
 import '../../helpers/fakes.dart';
@@ -23,12 +23,9 @@ Future<FakePixRepository> _pump(
       ),
       child: MaterialApp(
         theme: buildAppTheme(),
-        home: MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider<PixRepository>.value(value: repository),
-            RepositoryProvider<BiometricGate>.value(value: FakeBiometricGate()),
-          ],
-          child: const PixPage(),
+        home: RepositoryProvider<BiometricGate>.value(
+          value: FakeBiometricGate(),
+          child: UseCaseScope(pix: repository, child: const PixPage()),
         ),
       ),
     ),

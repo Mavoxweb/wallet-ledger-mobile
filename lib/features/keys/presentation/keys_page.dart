@@ -10,8 +10,10 @@ import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/empty_state.dart';
 import 'package:wallet_ledger_mobile/core/widgets/glass_nav_bar.dart';
 import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
 import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/add_pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/list_pix_keys.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/remove_pix_key.dart';
 import 'package:wallet_ledger_mobile/features/keys/presentation/cubit/keys_cubit.dart';
 import 'package:wallet_ledger_mobile/features/keys/presentation/view/add_key_sheet.dart';
 
@@ -22,7 +24,11 @@ class KeysPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final cubit = KeysCubit(keys: context.read<KeysRepository>());
+        final cubit = KeysCubit(
+          list: context.read<ListPixKeys>(),
+          add: context.read<AddPixKey>(),
+          remove: context.read<RemovePixKey>(),
+        );
         unawaited(cubit.load());
         return cubit;
       },
@@ -115,9 +121,9 @@ class _KeysView extends StatelessWidget {
                       const SizedBox(height: AppSpacing.xs),
                       Text(
                         state.status == KeysStatus.ready
-                            ? '${state.keys.length} de ${KeysCubit.maxKeys} '
+                            ? '${state.keys.length} de ${AddPixKey.maxKeys} '
                                   'chaves cadastradas'
-                            : 'Até ${KeysCubit.maxKeys} chaves por conta',
+                            : 'Até ${AddPixKey.maxKeys} chaves por conta',
                         style: AppText.caption,
                       ),
                       const SizedBox(height: AppSpacing.xl),

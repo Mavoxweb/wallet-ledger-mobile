@@ -5,7 +5,7 @@ import 'package:wallet_ledger_mobile/core/errors/error_messages.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/core/widgets/brand_mark.dart';
-import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
+import 'package:wallet_ledger_mobile/features/auth/domain/usecases/login.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/login/login_cubit.dart';
 
@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(context.read<AuthRepository>()),
+      create: (context) => LoginCubit(context.read<Login>()),
       child: BlocListener<LoginCubit, LoginState>(
         listenWhen: (previous, current) =>
             current.status == LoginStatus.success,

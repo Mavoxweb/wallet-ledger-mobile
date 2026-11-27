@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
-import 'package:wallet_ledger_mobile/features/charge/domain/charge_repository.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/charge/domain/usecases/create_charge.dart';
 import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/list_pix_keys.dart';
 
 enum ChargeStatus { loading, ready, failure }
 
@@ -68,16 +68,16 @@ class ChargeState extends Equatable {
 }
 
 class ChargeCubit extends Cubit<ChargeState> {
-  new({required this._keys, required this._charges})
+  new({required this._listKeys, required this._createCharge})
     : super(const ChargeState());
 
-  final KeysRepository _keys;
-  final ChargeRepository _charges;
+  final ListPixKeys _listKeys;
+  final CreateCharge _createCharge;
 
   Future<void> load() async {
     emit(const ChargeState());
     try {
-      final keys = await _keys.list();
+      final keys = await _listKeys();
       emit(
         ChargeState(
           status: ChargeStatus.ready,
@@ -107,7 +107,7 @@ class ChargeCubit extends Cubit<ChargeState> {
     if (keyId == null || state.generating) return;
     emit(state.copyWith(generating: true, failure: () => null));
     try {
-      final payload = await _charges.create(
+      final payload = await _createCharge(
         keyId: keyId,
         amountCents: state.amountCents,
       );

@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/app/launch_gate.dart';
 import 'package:wallet_ledger_mobile/app/router.dart';
 import 'package:wallet_ledger_mobile/app/scroll_behavior.dart';
+import 'package:wallet_ledger_mobile/app/use_case_scope.dart';
 import 'package:wallet_ledger_mobile/core/events/account_events.dart';
 import 'package:wallet_ledger_mobile/core/security/biometric_gate.dart';
 import 'package:wallet_ledger_mobile/core/storage/prefs_store.dart';
@@ -64,37 +65,33 @@ class _WalletLedgerAppState extends State<WalletLedgerApp> {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<AuthRepository>.value(value: widget.authRepository),
         RepositoryProvider<BiometricGate>.value(value: widget.biometricGate),
-        RepositoryProvider<AccountRepository>.value(
-          value: widget.accountRepository,
-        ),
-        RepositoryProvider<KeysRepository>.value(value: widget.keysRepository),
-        RepositoryProvider<PixRepository>.value(value: widget.pixRepository),
-        RepositoryProvider<ChargeRepository>.value(
-          value: widget.chargeRepository,
-        ),
-        RepositoryProvider<DepositRepository>.value(
-          value: widget.depositRepository,
-        ),
         RepositoryProvider<AccountEvents>.value(value: _accountEvents),
         RepositoryProvider<PrefsStore>.value(value: widget.prefsStore),
         RepositoryProvider<LaunchOpener>.value(
           value: LaunchOpener(_launch.open),
         ),
       ],
-      child: BlocProvider.value(
-        value: widget.sessionBloc,
-        child: MaterialApp.router(
-          title: 'Wallet Ledger',
-          debugShowCheckedModeBanner: false,
-          theme: buildAppTheme(),
-          locale: const Locale('pt', 'BR'),
-          supportedLocales: const [Locale('pt', 'BR')],
-          localizationsDelegates: GlobalMaterialLocalizations.delegates,
-          routerConfig: _router,
-          scrollBehavior: const AppScrollBehavior(),
-          builder: (context, child) => DeviceFrame(child: child!),
+      child: UseCaseScope(
+        auth: widget.authRepository,
+        account: widget.accountRepository,
+        keys: widget.keysRepository,
+        pix: widget.pixRepository,
+        charge: widget.chargeRepository,
+        deposit: widget.depositRepository,
+        child: BlocProvider.value(
+          value: widget.sessionBloc,
+          child: MaterialApp.router(
+            title: 'Wallet Ledger',
+            debugShowCheckedModeBanner: false,
+            theme: buildAppTheme(),
+            locale: const Locale('pt', 'BR'),
+            supportedLocales: const [Locale('pt', 'BR')],
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
+            routerConfig: _router,
+            scrollBehavior: const AppScrollBehavior(),
+            builder: (context, child) => DeviceFrame(child: child!),
+          ),
         ),
       ),
     );

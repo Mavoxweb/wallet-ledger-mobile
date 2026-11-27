@@ -2,21 +2,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:wallet_ledger_mobile/app/use_case_scope.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
-import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/login/login_page.dart';
+
+import '../../helpers/blocs.dart';
 
 class _MockAuthRepository extends Mock implements AuthRepository;
 
-Widget _app(AuthRepository repository) =>
-    RepositoryProvider<AuthRepository>.value(
-      value: repository,
-      child: BlocProvider(
-        create: (_) => SessionBloc(repository),
-        child: const MaterialApp(home: LoginPage()),
-      ),
-    );
+Widget _app(AuthRepository repository) => UseCaseScope(
+  auth: repository,
+  child: BlocProvider(
+    create: (_) => sessionBlocFor(repository),
+    child: const MaterialApp(home: LoginPage()),
+  ),
+);
 
 void main() {
   testWidgets('e-mail ou senha errados mostram a mensagem certa', (

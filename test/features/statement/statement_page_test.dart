@@ -1,6 +1,6 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:wallet_ledger_mobile/app/use_case_scope.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
 import 'package:wallet_ledger_mobile/core/theme/app_theme.dart';
 import 'package:wallet_ledger_mobile/features/account/domain/account_repository.dart';
@@ -18,8 +18,8 @@ Future<void> _pump(
       data: MediaQueryData(textScaler: TextScaler.linear(textScale)),
       child: MaterialApp(
         theme: buildAppTheme(),
-        home: RepositoryProvider<AccountRepository>.value(
-          value: accounts,
+        home: UseCaseScope(
+          account: accounts,
           // 26/11/2026 às 12:00 em Brasília: as amostras são de hoje e ontem.
           child: StatementPage(clock: () => DateTime.utc(2026, 11, 26, 15)),
         ),

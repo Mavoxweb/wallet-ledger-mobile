@@ -2,11 +2,11 @@ import 'package:material_ui/material_ui.dart';
 import 'package:wallet_ledger_mobile/core/theme/tokens.dart';
 import 'package:wallet_ledger_mobile/core/theme/typography.dart';
 import 'package:wallet_ledger_mobile/features/keys/domain/pix_key.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/add_pix_key.dart';
 
 class KeysCard extends StatelessWidget {
   const new({required this.keys, super.key});
 
-  static const maxKeys = 5;
   static const _text = Color(0xFF24514A);
 
   final List<PixKeyItem> keys;
@@ -39,7 +39,10 @@ class KeysCard extends StatelessWidget {
             'Suas chaves Pix',
             style: AppText.caption.copyWith(color: _text),
           ),
-          Text('${keys.length} de $maxKeys', style: AppText.money(30)),
+          Text(
+            '${keys.length} de ${AddPixKey.maxKeys}',
+            style: AppText.money(30),
+          ),
           Text(
             summary,
             maxLines: 2,

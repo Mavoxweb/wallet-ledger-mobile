@@ -10,6 +10,7 @@ import 'package:wallet_ledger_mobile/features/auth/domain/auth_repository.dart';
 import 'package:wallet_ledger_mobile/features/auth/domain/me.dart';
 import 'package:wallet_ledger_mobile/features/auth/presentation/bloc/session_bloc.dart';
 
+import 'blocs.dart';
 import 'fakes.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository;
@@ -62,7 +63,7 @@ Future<void> pumpApp(
   bool reduceMotion = false,
   FakeAccountRepository? accounts,
 }) async {
-  final session = SessionBloc(repository)..add(const SessionStarted());
+  final session = sessionBlocFor(repository)..add(const SessionStarted());
   await tester.pumpWidget(
     MediaQuery(
       data: MediaQueryData(

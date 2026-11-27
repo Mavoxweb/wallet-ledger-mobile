@@ -15,9 +15,9 @@ import 'package:wallet_ledger_mobile/core/widgets/glass_nav_bar.dart';
 import 'package:wallet_ledger_mobile/core/widgets/money_text.dart';
 import 'package:wallet_ledger_mobile/core/widgets/pressable.dart';
 import 'package:wallet_ledger_mobile/core/widgets/primary_button.dart';
-import 'package:wallet_ledger_mobile/features/charge/domain/charge_repository.dart';
+import 'package:wallet_ledger_mobile/features/charge/domain/usecases/create_charge.dart';
 import 'package:wallet_ledger_mobile/features/charge/presentation/cubit/charge_cubit.dart';
-import 'package:wallet_ledger_mobile/features/keys/domain/keys_repository.dart';
+import 'package:wallet_ledger_mobile/features/keys/domain/usecases/list_pix_keys.dart';
 
 class ChargePage extends StatelessWidget {
   const new({super.key});
@@ -27,8 +27,8 @@ class ChargePage extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final cubit = ChargeCubit(
-          keys: context.read<KeysRepository>(),
-          charges: context.read<ChargeRepository>(),
+          listKeys: context.read<ListPixKeys>(),
+          createCharge: context.read<CreateCharge>(),
         );
         unawaited(cubit.load());
         return cubit;

@@ -59,4 +59,33 @@ void main() {
   test('as falhas não dependem do Dio', () {
     expect(_importsOf(File('lib/core/errors/failure.dart')), isEmpty);
   });
+
+  test('presentation conhece só o domínio: nem data, nem o cliente gerado', () {
+    final presentation = Directory('lib/features')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((f) => f.path.replaceAll(r'\', '/').contains('/presentation/'));
+    final violations = [
+      for (final file in presentation)
+        for (final uri in _importsOf(file))
+          if (RegExp('^${_pkg}features/\\w+/data/').hasMatch(uri) ||
+              uri.startsWith('package:wallet_ledger_api/') ||
+              uri.startsWith('package:dio/'))
+            '${file.path}: $uri',
+    ];
+    expect(violations, isEmpty);
+  });
+
+  test('as telas leem casos de uso, nunca repositórios', () {
+    final presentation = Directory('lib/features')
+        .listSync(recursive: true)
+        .whereType<File>()
+        .where((f) => f.path.replaceAll(r'\', '/').contains('/presentation/'));
+    final reads = RegExp(r'context\.(read|watch)<\w+Repository>');
+    final violations = [
+      for (final file in presentation)
+        if (reads.hasMatch(file.readAsStringSync())) file.path,
+    ];
+    expect(violations, isEmpty);
+  });
 }

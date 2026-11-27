@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wallet_ledger_mobile/core/errors/failure.dart';
+import 'package:wallet_ledger_mobile/features/account/domain/usecases/get_statement.dart';
 import 'package:wallet_ledger_mobile/features/statement/presentation/bloc/statement_bloc.dart';
 
 import '../../helpers/fakes.dart';
@@ -12,11 +13,13 @@ void main() {
     blocTest<StatementBloc, StatementState>(
       'junta as páginas sem repetir e para quando o cursor é nulo',
       build: () => StatementBloc(
-        accounts: PagedAccountRepository({
-          null: page([30, 20], next: 'c1'),
-          // A página 2 repete o 20: não pode aparecer duas vezes.
-          'c1': page([20, 10], next: null),
-        }),
+        getStatement: GetStatement(
+          PagedAccountRepository({
+            null: page([30, 20], next: 'c1'),
+            // A página 2 repete o 20: não pode aparecer duas vezes.
+            'c1': page([20, 10], next: null),
+          }),
+        ),
       ),
       act: (bloc) async {
         bloc.add(const StatementStarted());
@@ -40,7 +43,7 @@ void main() {
         },
         hold: {'c1': gate},
       );
-      final bloc = StatementBloc(accounts: accounts)
+      final bloc = StatementBloc(getStatement: GetStatement(accounts))
         ..add(const StatementStarted());
       await Future<void>.delayed(Duration.zero);
 
@@ -58,7 +61,8 @@ void main() {
 
     blocTest<StatementBloc, StatementState>(
       'filtro de entradas mostra só o que entrou',
-      build: () => StatementBloc(accounts: FakeAccountRepository()),
+      build: () =>
+          StatementBloc(getStatement: GetStatement(FakeAccountRepository())),
       act: (bloc) async {
         bloc.add(const StatementStarted());
         await Future<void>.delayed(Duration.zero);
@@ -75,7 +79,9 @@ void main() {
     blocTest<StatementBloc, StatementState>(
       'falha na primeira página vira erro de tela',
       build: () => StatementBloc(
-        accounts: FakeAccountRepository(failure: const NetworkFailure()),
+        getStatement: GetStatement(
+          FakeAccountRepository(failure: const NetworkFailure()),
+        ),
       ),
       act: (bloc) => bloc.add(const StatementStarted()),
       verify: (bloc) {
@@ -87,11 +93,13 @@ void main() {
     blocTest<StatementBloc, StatementState>(
       'falha ao carregar mais mantém a lista e permite tentar de novo',
       build: () => StatementBloc(
-        accounts: PagedAccountRepository(
-          {
-            null: page([30], next: 'c1'),
-          },
-          failOn: {'c1'},
+        getStatement: GetStatement(
+          PagedAccountRepository(
+            {
+              null: page([30], next: 'c1'),
+            },
+            failOn: {'c1'},
+          ),
         ),
       ),
       act: (bloc) async {
@@ -111,9 +119,11 @@ void main() {
     blocTest<StatementBloc, StatementState>(
       'atualizar troca a lista pela primeira página nova',
       build: () => StatementBloc(
-        accounts: PagedAccountRepository({
-          null: page([30], next: null),
-        }),
+        getStatement: GetStatement(
+          PagedAccountRepository({
+            null: page([30], next: null),
+          }),
+        ),
       ),
       seed: () => StatementState(
         status: StatementStatus.ready,
